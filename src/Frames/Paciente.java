@@ -75,13 +75,13 @@ public class Paciente extends javax.swing.JFrame {
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             
             if(rs.next()){ // para verificar si trae los datos de la consulta
-              textIsDiagnostic.setText("Este paciente ya se ha realizado un prediagnostico");
+              textIsDiagnostic.setText("Este paciente ya se ha realizado un prediagnóstico");
               btnTerapia.setVisible(true);
               btnDetails.setVisible(true);
               comboTerapia.setVisible(true);
  
             }else{
-              textIsDiagnostic.setText("Este paciente no se ha realizado un prediagnostico");
+              textIsDiagnostic.setText("Este paciente no se ha realizado un prediagnóstico");
               textIsDiagnostic.setForeground(Color.red);
             }
             ps.close();
@@ -139,7 +139,7 @@ public class Paciente extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Paciente");
 
-        textIsDiagnostic.setText("Este paciente no se ha realizado un prediagnostico");
+        textIsDiagnostic.setText("Este paciente no se ha realizado un prediagnóstico");
 
         btnDiagnostico.setText("Realizar Prediganostico");
         btnDiagnostico.addActionListener(new java.awt.event.ActionListener() {

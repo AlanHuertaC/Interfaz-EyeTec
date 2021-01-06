@@ -41,9 +41,9 @@ public class Login extends javax.swing.JFrame {
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
         try{
-            ps = con.prepareStatement("SELECT * FROM especialista where nombre = ? and cedula = ?");
-            ps.setString(1, textName.getText());
-            ps.setString(2, textCedula.getText());
+            ps = con.prepareStatement("SELECT * FROM especialista where usuario = ? and contraseña = ?");
+            ps.setString(1, textUsuario.getText());
+            ps.setString(2, textPassword.getText());
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             
@@ -78,33 +78,27 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        textName = new javax.swing.JTextField();
+        textUsuario = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        textCedula = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        textPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/image.png"))); // NOI18N
 
-        jLabel2.setText("Nombre:");
+        jLabel2.setText("Usuario:");
 
-        textName.addKeyListener(new java.awt.event.KeyAdapter() {
+        textUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                textNameKeyPressed(evt);
+                textUsuarioKeyPressed(evt);
             }
         });
 
-        jLabel3.setText("Cédula: ");
-
-        textCedula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                textCedulaKeyPressed(evt);
-            }
-        });
+        jLabel3.setText("Contraseña:");
 
         jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -127,32 +121,41 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        textPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textPasswordKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textName))
-                    .addComponent(jLabel1)
+                        .addComponent(textUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textCedula)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                        .addComponent(textPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                .addGap(36, 36, 36))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
-                .addGap(70, 70, 70))
+                .addGap(78, 78, 78))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,11 +164,11 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(textName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(textCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -184,7 +187,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(textName.getText().isEmpty()  || textCedula.getText().isEmpty() ){
+        if(textUsuario.getText().isEmpty()  || textPassword.getText().isEmpty() ){
             JOptionPane.showMessageDialog(null, "Debe llenar los campos solicitados");
         }else
         login();
@@ -196,23 +199,23 @@ public class Login extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jLabel5MouseClicked
 
-    private void textNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textNameKeyPressed
+    private void textUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textUsuarioKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            if(textName.getText().isEmpty()  || textCedula.getText().isEmpty() ){
+            if(textUsuario.getText().isEmpty()  || textPassword.getText().isEmpty() ){
                 JOptionPane.showMessageDialog(null, "Debe llenar los campos solicitados");
             }else
                 login();
         }
-    }//GEN-LAST:event_textNameKeyPressed
+    }//GEN-LAST:event_textUsuarioKeyPressed
 
-    private void textCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCedulaKeyPressed
+    private void textPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textPasswordKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            if(textName.getText().isEmpty()  || textCedula.getText().isEmpty() ){
-            JOptionPane.showMessageDialog(null, "Debe llenar los campos solicitados");
+            if(textUsuario.getText().isEmpty()  || textPassword.getText().isEmpty() ){
+                JOptionPane.showMessageDialog(null, "Debe llenar los campos solicitados");
             }else
                 login();
         }
-    }//GEN-LAST:event_textCedulaKeyPressed
+    }//GEN-LAST:event_textPasswordKeyPressed
 
     /**
      * @param args the command line arguments
@@ -256,8 +259,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField textCedula;
-    private javax.swing.JTextField textName;
+    private javax.swing.JPasswordField textPassword;
+    private javax.swing.JTextField textUsuario;
     // End of variables declaration//GEN-END:variables
 
  class Fondo extends JPanel{

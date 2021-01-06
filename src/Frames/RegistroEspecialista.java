@@ -30,13 +30,15 @@ public class RegistroEspecialista extends javax.swing.JFrame {
         Connection con = null;
         try{
             con = cone.getConexion(); //trae la conexion
-            ps = con.prepareStatement("Insert INTO Especialista (nombre,ap_paterno,ap_materno,cedula,sexo,edad) VALUES(?,?,?,?,?,?)"); // para insertar valores a mi tabla
+            ps = con.prepareStatement("Insert INTO Especialista (nombre,ap_paterno,ap_materno,cedula,sexo,edad,usuario,contraseña) VALUES(?,?,?,?,?,?,?,?)"); // para insertar valores a mi tabla
             ps.setString(1,textNombre.getText()); // (indice desde el cual va empezar osea la clave, guarda el texto que esta en el text Field)
             ps.setString(2,textApPaterno.getText());
             ps.setString(3, textApMaterno.getText());
             ps.setString(4, textCedula.getText());
             ps.setString(5, comboSexo.getSelectedItem().toString());            
             ps.setString(6, spinnerEdad.getValue().toString());
+            ps.setString(7, textUsuario.getText());
+            ps.setString(8, textConfirmPassword.getText());
             
             int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien el insert
             
@@ -77,10 +79,14 @@ public class RegistroEspecialista extends javax.swing.JFrame {
         textApMaterno = new javax.swing.JTextField();
         comboSexo = new javax.swing.JComboBox<>();
         spinnerEdad = new javax.swing.JSpinner();
-        jLabel7 = new javax.swing.JLabel();
-        textCedula = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
-        textConfirmCedula = new javax.swing.JPasswordField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        textUsuario = new javax.swing.JTextField();
+        textPassword = new javax.swing.JPasswordField();
+        textConfirmPassword = new javax.swing.JPasswordField();
+        textCedula = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -134,14 +140,6 @@ public class RegistroEspecialista extends javax.swing.JFrame {
 
         spinnerEdad.setModel(new javax.swing.SpinnerNumberModel(1, 1, 99, 1));
 
-        jLabel7.setText("Confirmar Cédula:");
-
-        textCedula.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                textCedulaFocusLost(evt);
-            }
-        });
-
         jButton1.setText("Volver");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -154,9 +152,27 @@ public class RegistroEspecialista extends javax.swing.JFrame {
             }
         });
 
-        textConfirmCedula.addFocusListener(new java.awt.event.FocusAdapter() {
+        jLabel8.setText("Usuario:");
+
+        jLabel9.setText("Contraseña:");
+
+        jLabel10.setText("Confirmar:");
+
+        textUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                textConfirmCedulaFocusLost(evt);
+                textUsuarioFocusLost(evt);
+            }
+        });
+
+        textPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                textPasswordFocusLost(evt);
+            }
+        });
+
+        textConfirmPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                textConfirmPasswordFocusLost(evt);
             }
         });
 
@@ -167,45 +183,50 @@ public class RegistroEspecialista extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(comboSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(spinnerEdad)
-                                .addGap(36, 36, 36)))
-                        .addGap(0, 11, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegistrar))
-                        .addGap(61, 61, 61))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel1))
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabel3)
-                                        .addComponent(jLabel4))))
+                                        .addComponent(jLabel4)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(textApPaterno)
+                                    .addComponent(textNombre)
+                                    .addComponent(textApMaterno)
+                                    .addComponent(textCedula)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(jLabel7)))
+                                .addGap(23, 23, 23)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel10))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(spinnerEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(textUsuario)
+                                    .addComponent(textPassword)
+                                    .addComponent(textConfirmPassword)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textApPaterno)
-                            .addComponent(textNombre)
-                            .addComponent(textApMaterno)
-                            .addComponent(textCedula)
-                            .addComponent(textConfirmCedula))))
-                .addGap(16, 16, 16))
+                        .addComponent(comboSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 28, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(81, 81, 81)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegistrar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,21 +249,29 @@ public class RegistroEspecialista extends javax.swing.JFrame {
                     .addComponent(textCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(textConfirmCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(comboSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(spinnerEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(textUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(textPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(textConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(btnRegistrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -271,9 +300,10 @@ public class RegistroEspecialista extends javax.swing.JFrame {
         }else
         if(textNombre.getText().isEmpty() || textApPaterno.getText().isEmpty() 
            || textApMaterno.getText().isEmpty() || textCedula.getText().isEmpty()
-           || textConfirmCedula.getText().isEmpty()){
+           || textPassword.getText().isEmpty() || textConfirmPassword.getText().isEmpty() ){
             JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
         }else{
+            JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
             registro();
         }
         /*int valorSpinner = (int) spinnerEdad.getValue();
@@ -288,37 +318,6 @@ public class RegistroEspecialista extends javax.swing.JFrame {
         login.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void textConfirmCedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textConfirmCedulaFocusLost
-        if(!textCedula.getText().equals(textConfirmCedula.getText()) && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null, "La cédula no coincide, favor de verificar sus datos");
-            textCedula.setText("");
-            textConfirmCedula.setText("");
-            flag = false;
-        }
-    }//GEN-LAST:event_textConfirmCedulaFocusLost
-
-    private void textCedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textCedulaFocusLost
-        if(textCedula.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Cédula");
-            flag = false;
-        }
-        else
-        if (!textCedula.getText().matches("[0-9]*") && flag == false){   
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo numeros en la Cédula");
-            textCedula.setText("");
-            flag = false;
-        }
-        else if(textCedula.getText().length()<7 && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"La Cédula se compone de al menos 7 digitos, debe volver a ingresarla");
-            textCedula.setText("");
-            flag = false;
-        }
-    }//GEN-LAST:event_textCedulaFocusLost
 
     private void textNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNombreFocusLost
         if(textNombre.getText().isEmpty() && flag == false){
@@ -369,6 +368,47 @@ public class RegistroEspecialista extends javax.swing.JFrame {
         flag = true;
     }//GEN-LAST:event_jButton1MouseEntered
 
+    private void textUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textUsuarioFocusLost
+        if(textUsuario.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Usuario");
+            flag = false;
+        }
+        else
+        if(!textUsuario.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Usuario");
+            textUsuario.setText("");            
+            flag = false;
+        }
+    }//GEN-LAST:event_textUsuarioFocusLost
+
+    private void textPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textPasswordFocusLost
+         if(textPassword.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Contraseña");
+            flag = false;
+        }
+        else
+        if (!textPassword.getText().matches("^[a-zA-Z0-9À-ÿ\u00f1\u00d1]+$") && flag == false){   
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar letras y numeros sin caracteres especiales o espacios");
+            textPassword.setText("");
+            flag = false;
+        }
+        
+    }//GEN-LAST:event_textPasswordFocusLost
+
+    private void textConfirmPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textConfirmPasswordFocusLost
+        if(!textPassword.getText().equals(textConfirmPassword.getText()) && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null, "La contraseña no coincide, favor de verificarla");
+            textPassword.setText("");
+            textConfirmPassword.setText("");
+            flag = false;
+        }
+    }//GEN-LAST:event_textConfirmPasswordFocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -409,18 +449,22 @@ public class RegistroEspecialista extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboSexo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner spinnerEdad;
     private javax.swing.JTextField textApMaterno;
     private javax.swing.JTextField textApPaterno;
-    private javax.swing.JPasswordField textCedula;
-    private javax.swing.JPasswordField textConfirmCedula;
+    private javax.swing.JTextField textCedula;
+    private javax.swing.JPasswordField textConfirmPassword;
     private javax.swing.JTextField textNombre;
+    private javax.swing.JPasswordField textPassword;
+    private javax.swing.JTextField textUsuario;
     // End of variables declaration//GEN-END:variables
 }

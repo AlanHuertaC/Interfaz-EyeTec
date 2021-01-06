@@ -133,7 +133,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="textIsDiagnostic">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Este paciente no se ha realizado un prediagnostico"/>
+            <Property name="text" type="java.lang.String" value="Este paciente no se ha realizado un prediagn&#xf3;stico"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnDiagnostico">

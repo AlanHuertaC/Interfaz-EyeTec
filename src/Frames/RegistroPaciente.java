@@ -343,7 +343,8 @@ public class RegistroPaciente extends javax.swing.JFrame {
             || textEmail.getText().isEmpty() || dateChooserNacimiento.getCalendar() == null){
             JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
         }else{
-        registroPaciente();
+            JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
+            registroPaciente();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

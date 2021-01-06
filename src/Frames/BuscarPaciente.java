@@ -184,7 +184,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        jLabel1.setText("Bienvenido doctor ");
+        jLabel1.setText("Bienvenido ");
 
         textNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         textNombre.setText("Nombre");
@@ -467,33 +467,36 @@ public class BuscarPaciente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try{
-            if(textSearch.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Debe seleccionar al paciente a eliminar");
-            }else{
-                /*Eliminar paciente*/
-                //System.out.println(datosPaciente[1]+ " " + datosPaciente[2] + " " + datosPaciente[3] );
-                try{
-                    ps = con.prepareStatement("DELETE FROM Paciente WHERE nombre=? AND ap_paterno=? AND ap_materno=?");
-                    ps.setString(1, datosPaciente[1]);
-                    ps.setString(2, datosPaciente[2]);
-                    ps.setString(3, datosPaciente[3]);
-                    int res = ps.executeUpdate();
-                    
-                    if(res > 0){
-                        System.out.println("Se Eliminó correctamente el paciente");
-                        textSearch.setText("");
-                        llenarTablaInicio();
-                    }else{
-                        JOptionPane.showMessageDialog(null,"No se pudo eliminar el Paciente");
-                    } 
-                }catch(Exception e){
-                    JOptionPane.showMessageDialog(null, "Error al querer eliminar al paciente, favor de intentar mas tarde");
+        int option = JOptionPane.showConfirmDialog(null, "¿Desea eliminar este registro de manera permanente?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if(option == 0){
+            try{
+                if(textSearch.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Debe seleccionar al paciente a eliminar");
+                }else{
+                    /*Eliminar paciente*/
+                    //System.out.println(datosPaciente[1]+ " " + datosPaciente[2] + " " + datosPaciente[3] );
+                    try{
+                        ps = con.prepareStatement("DELETE FROM Paciente WHERE nombre=? AND ap_paterno=? AND ap_materno=?");
+                        ps.setString(1, datosPaciente[1]);
+                        ps.setString(2, datosPaciente[2]);
+                        ps.setString(3, datosPaciente[3]);
+                        int res = ps.executeUpdate();
+
+                        if(res > 0){
+                            System.out.println("Se Eliminó correctamente el paciente");
+                            textSearch.setText("");
+                            llenarTablaInicio();
+                        }else{
+                            JOptionPane.showMessageDialog(null,"No se pudo eliminar el Paciente");
+                        } 
+                    }catch(Exception e){
+                        JOptionPane.showMessageDialog(null, "Error al querer eliminar al paciente, favor de intentar mas tarde");
+                    }
                 }
-            }
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Debe seleccionar al paciente a eliminar");
-        }        
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Debe seleccionar al paciente a eliminar");
+            }  
+        }   
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
