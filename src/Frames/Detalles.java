@@ -5,6 +5,11 @@
  */
 package Frames;
 
+import DAO.Diagnostico;
+import DAO.Especialista;
+import DAO.Ojo;
+import DAO.Prediagnostico;
+import DAO.Tratamiento;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -22,6 +27,14 @@ import javax.swing.JTextArea;
  * @author Alan Huerta Cortes
  */
 public class Detalles extends javax.swing.JFrame {
+    /*Clases*/
+    Especialista especialista;
+    DAO.Paciente paciente;
+    Ojo ojo; 
+    Diagnostico diagnostico;
+    Tratamiento tratamiento;
+    Prediagnostico prediagnostico;
+    
     /*variables prediagnostico*/
     JPanel panelPre;
     JLabel textLabelPre[];
@@ -33,11 +46,17 @@ public class Detalles extends javax.swing.JFrame {
     JTextArea textAreaTra[];
     JScrollPane jScrollPaneTra[];
    
-    public Detalles() {
+    public Detalles(Especialista especialista, DAO.Paciente paciente, Ojo ojo, Diagnostico diagnostico, Tratamiento tratamiento, Prediagnostico prediagnostico){
+        this.especialista = especialista;
+        this.paciente = paciente;
+        this.ojo = ojo;
+        this.diagnostico = diagnostico;
+        this.tratamiento = tratamiento;
+        this.prediagnostico = prediagnostico;
         initComponents();
         
         /*Nombre del Paciente*/
-        labelName.setText(BuscarPaciente.datosPaciente[1] + " " + BuscarPaciente.datosPaciente[2] + " " + BuscarPaciente.datosPaciente[3]);
+        labelName.setText( this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
         /*Prediagnostico*/
         try{
             panelPre = new JPanel();        
@@ -129,7 +148,7 @@ public class Detalles extends javax.swing.JFrame {
                             "Fecha de Realización: "+ Paciente.fecha + "\n");    
     }*/
     
-    public void pruebas(){
+    public void set(){
         
     }
     /**
@@ -254,7 +273,13 @@ public class Detalles extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Detalles().setVisible(true);
+                Especialista especialista = new Especialista();
+                DAO.Paciente paciente = new DAO.Paciente();
+                Ojo ojo = new Ojo();
+                Diagnostico diagnostico = new Diagnostico();
+                Tratamiento tratamiento = new Tratamiento();
+                 Prediagnostico prediagnostico = new Prediagnostico();
+                new Detalles(especialista,paciente,ojo,diagnostico,tratamiento,prediagnostico).setVisible(true);
             }
         });
     }

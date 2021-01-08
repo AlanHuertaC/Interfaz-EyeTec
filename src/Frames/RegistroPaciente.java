@@ -7,6 +7,7 @@ package Frames;
 
 import Clases.Conexion;
 import Clases.Unity;
+import DAO.Especialista;
 import com.toedter.calendar.JDateChooser;
 import java.sql.Connection;
 import java.sql.Date;
@@ -28,9 +29,11 @@ public class RegistroPaciente extends javax.swing.JFrame {
     String idPaciente;
     String idEspecialista;
     public boolean flag = false;
+    Especialista especialista = new Especialista();
     
-    public RegistroPaciente(String idEspecialista) {
-        this.idEspecialista = idEspecialista;
+    public RegistroPaciente(Especialista especialista) {
+        this.especialista = especialista;
+        this.idEspecialista = String.valueOf(especialista.getIdEspecialista());// idEspecialista;
         initComponents();
         setTitle("Registro pacientes");
         setResizable(false);
@@ -349,7 +352,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        BuscarPaciente buscarPaciente = new BuscarPaciente();
+        BuscarPaciente buscarPaciente = new BuscarPaciente(especialista);
         buscarPaciente.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -455,7 +458,8 @@ public class RegistroPaciente extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegistroPaciente("").setVisible(true);
+                Especialista especialista = new Especialista();
+                new RegistroPaciente(especialista).setVisible(true);
             }
         });
     }

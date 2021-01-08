@@ -6,6 +6,7 @@
 package Frames;
 
 import Clases.Conexion;
+import DAO.Especialista;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,18 +31,20 @@ public class BuscarPaciente extends javax.swing.JFrame {
     String column[] = new String[Tamano];
     ResultSetMetaData rsMeta;
     int indiceFilaSeleccionada;
-    public static String datosPaciente[];
+    //public static String datosPaciente[];
     
-    public BuscarPaciente() {
+    Especialista especialista;
+    DAO.Paciente paciente;
+    
+    public BuscarPaciente(Especialista especialista) {
         initComponents();
         con = cone.getConexion(); //trae la conexion
-        textNombre.setText(Login.nombreEspecialista + " " + Login.apellidoPaterno + " " + Login.apellidoMaterno);
-        
+        this.especialista = especialista;
+        textNombre.setText(this.especialista.getNombre() + " " + especialista.getApellidoPaterno() + " " + especialista.getApellidoMaterno());
         llenarTablaInicio();
         seleccionFilas();
-        
     }
-    
+        
     public void llenarTablaInicio(){
         try{            
             Statement st = con.createStatement(); 
@@ -294,7 +297,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
       
-        Paciente paciente = new Paciente();
+        Paciente paciente = new Paciente(this.especialista, this.paciente);
         paciente.setVisible(true);
         dispose();
         //System.out.println("El id es " + Login.idEspecialista);
@@ -316,8 +319,8 @@ public class BuscarPaciente extends javax.swing.JFrame {
                 if(res > 0){
                     System.out.println("Se agrego correctamente el registro api");
                     ps = con.prepareStatement("UPDATE api SET idPaciente=?, idEspecialista=? WHERE id=? "); // para insertar valores a mi tabla
-                    ps.setString(1, datosPaciente[0]);
-                    ps.setString(2, Login.idEspecialista);
+                    ps.setInt(1, this.paciente.getIdPaciente());
+                    ps.setInt(2, especialista.getIdEspecialista());
                     ps.setString(3,"1");
 
                     res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
@@ -332,8 +335,8 @@ public class BuscarPaciente extends javax.swing.JFrame {
                 } 
             }else{
                 ps = con.prepareStatement("UPDATE api SET idPaciente=?, idEspecialista=? WHERE id=? "); // para insertar valores a mi tabla
-                ps.setString(1, datosPaciente[0]);
-                ps.setString(2, Login.idEspecialista);
+                ps.setInt(1, this.paciente.getIdPaciente());
+                ps.setInt(2, especialista.getIdEspecialista());
                 ps.setString(3,"1");
 
                 int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
@@ -455,13 +458,15 @@ public class BuscarPaciente extends javax.swing.JFrame {
         }       
         dtm.addRow(datosPaciente);                 
         tablaPacientes.setModel(dtm);
-
-        this.datosPaciente = datosPaciente;
+        
+        this.paciente = new DAO.Paciente(Integer.parseInt(datosPaciente[0]),datosPaciente[1],datosPaciente[2],datosPaciente[3],datosPaciente[4],datosPaciente[5],datosPaciente[6]);
+        
+        //this.datosPaciente = datosPaciente;
         //System.out.println(" dato: " + this.datosPaciente[2]);
     }//GEN-LAST:event_tablaPacientesMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        RegistroPaciente registroPaciente = new RegistroPaciente(Login.idEspecialista);
+        RegistroPaciente registroPaciente = new RegistroPaciente(especialista);
         registroPaciente.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -477,9 +482,9 @@ public class BuscarPaciente extends javax.swing.JFrame {
                     //System.out.println(datosPaciente[1]+ " " + datosPaciente[2] + " " + datosPaciente[3] );
                     try{
                         ps = con.prepareStatement("DELETE FROM Paciente WHERE nombre=? AND ap_paterno=? AND ap_materno=?");
-                        ps.setString(1, datosPaciente[1]);
-                        ps.setString(2, datosPaciente[2]);
-                        ps.setString(3, datosPaciente[3]);
+                        ps.setString(1, this.paciente.getNombre());
+                        ps.setString(2, this.paciente.getApellidoPaterno());
+                        ps.setString(3, this.paciente.getApellidoMaterno());
                         int res = ps.executeUpdate();
 
                         if(res > 0){
@@ -529,7 +534,8 @@ public class BuscarPaciente extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BuscarPaciente().setVisible(true);
+                Especialista especialista = new Especialista();
+                new BuscarPaciente(especialista).setVisible(true);
             }
         });
     }

@@ -6,6 +6,7 @@
 package Frames;
 
 import Clases.Conexion;
+import DAO.Especialista;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -26,15 +27,11 @@ public class Login extends javax.swing.JFrame {
     PreparedStatement ps;
     ResultSet rs;
     Conexion cone = new Conexion();
+    Especialista especialista;
     /*Datos del especialista*/
-    public static String idEspecialista;
-    public static String nombreEspecialista;
-    public static String apellidoPaterno;
-    public static String apellidoMaterno;
     public Login() {
         this.setContentPane(fondo);
-        initComponents();
-        
+        initComponents();        
     }
     
     public void login(){
@@ -48,13 +45,18 @@ public class Login extends javax.swing.JFrame {
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             
             if(rs.next()){ // para verificar si trae los datos de la consulta
-                idEspecialista= rs.getString("idEspecialista");
-                nombreEspecialista = rs.getString("nombre");
-                apellidoPaterno = rs.getString("ap_paterno");
-                apellidoMaterno = rs.getString("ap_materno");
-                //RegistroPaciente registro = new RegistroPaciente(idEspecialista);
-                //registro.setVisible(true);
-                BuscarPaciente buscarP = new BuscarPaciente();
+                /*especialista.setIdEspecialista(rs.getInt("idEspecialista"));
+                especialista.setNombre(rs.getString("nombre"));
+                especialista.setApellidoPaterno(rs.getString("ap_paterno"));
+                especialista.setApellidoMaterno(rs.getString("ap_materno"));
+                especialista.setCedula(rs.getString("cedula"));
+                especialista.setSexo(rs.getString("sexo"));
+                especialista.setEdad(rs.getInt("edad"));
+                especialista.setUsuario(rs.getString("usuario"));
+                especialista.setContrasena(rs.getString("contraseña"));*/
+                especialista = new Especialista(rs.getInt("idEspecialista"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("cedula"), rs.getString("sexo"), rs.getInt("edad"), rs.getString("usuario"), rs.getString("contraseña"));                
+                
+                BuscarPaciente buscarP = new BuscarPaciente(especialista);
                 buscarP.setVisible(true);
                 dispose();
  
@@ -63,7 +65,7 @@ public class Login extends javax.swing.JFrame {
             }
             ps.close();
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta" + e.getMessage());
         }
     }
 
