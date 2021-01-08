@@ -59,7 +59,7 @@ public class Login extends javax.swing.JFrame {
                 dispose();
  
             }else{
-                JOptionPane.showMessageDialog(null,"Nombre o cedula incorrecto, verifique sus datos");
+                JOptionPane.showMessageDialog(null,"Usuario o contraseña incorrecta, verifique sus datos");
             }
             ps.close();
         }catch(Exception e){

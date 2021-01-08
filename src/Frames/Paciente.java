@@ -141,7 +141,7 @@ public class Paciente extends javax.swing.JFrame {
 
         textIsDiagnostic.setText("Este paciente no se ha realizado un prediagnóstico");
 
-        btnDiagnostico.setText("Realizar Prediganostico");
+        btnDiagnostico.setText("Realizar Prediganóstico");
         btnDiagnostico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDiagnosticoActionPerformed(evt);

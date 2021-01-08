@@ -98,6 +98,8 @@ public class Detalles extends javax.swing.JFrame {
                     nombreTerapia = "Juego SpaceHero";
                 }else if(Paciente.tipoTratamiento.get(i).equals("Calentamiento")){
                     nombreTerapia = "Espacio Atmósferico";
+                }else if(Paciente.tipoTratamiento.get(i).equals("Relajación")){
+                    nombreTerapia = "Lazy Sphere 2077";
                 }
                 
                 textAreaTra[i].setText("Tipo de Tratamiento: " + Paciente.tipoTratamiento.get(i) + "\n" +"\n" +
