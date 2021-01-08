@@ -18,6 +18,11 @@ public class Diagnostico {
     public  Diagnostico(){
         
     }
+
+    public Diagnostico(String tipoEstrabismo) {
+        this.tipoEstrabismo = tipoEstrabismo;
+    }
+    
     public Diagnostico(int idDiagnostico, String tipoEstrabismo, String caracteristicas, String observaciones) {
         this.idDiagnostico = idDiagnostico;
         this.tipoEstrabismo = tipoEstrabismo;

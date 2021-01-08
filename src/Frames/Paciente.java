@@ -33,13 +33,9 @@ public class Paciente extends javax.swing.JFrame {
     PreparedStatement ps;
     ResultSet rs;
     Conexion cone = new Conexion();
-    Diagnostico diagnostico = new Diagnostico();
-    Ojo ojo = new Ojo();
-    Prediagnostico prediagnostico = new Prediagnostico();
-    Tratamiento tratamineto = new Tratamiento();
     
-    Especialista especialista = new Especialista();
-    DAO.Paciente paciente = new DAO.Paciente();
+    Especialista especialista;
+    DAO.Paciente paciente;
      
     public Paciente(Especialista especialista, DAO.Paciente paciente) {
         initComponents();
@@ -347,7 +343,16 @@ public class Paciente extends javax.swing.JFrame {
     private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
-        /*Datos del prediagnostico*/        
+        /*Datos del prediagnostico*/          
+        ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
+        ArrayList<Ojo> ojo = new ArrayList<Ojo>();
+        ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
+        ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
+        
+        ArrayList<Especialista> especialista = new ArrayList<Especialista>();
+        //ArrayList<DAO.Paciente> paciente = new ArrayList<DAO.Paciente>();
+
+        /**/
         boolean flag = false;
         
         try{
@@ -355,26 +360,29 @@ public class Paciente extends javax.swing.JFrame {
             ps.setInt(1, this.paciente.getIdPaciente());            
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
-            
+            int index = 0;
             while(rs.next()){ // para verificar si trae los datos de la consulta  
-                diagnostico.setTipoEstrabismo(rs.getString("tipo_estrabismo"));
-                especialista.setNombre(rs.getString("nombre"));
-                especialista.setApellidoPaterno(rs.getString("ap_paterno"));
-                especialista.setApellidoMaterno(rs.getString("ap_materno"));
+                diagnostico.add(new Diagnostico(rs.getString("tipo_estrabismo")));
+                especialista.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
+                
+                //System.out.println("F: " + diagnostico.get(0).getTipoEstrabismo());
+                index ++;
             }
             ps = con.prepareStatement("SELECT DISTINCT o.desviacion_der, o.desviacion_izq, o.dioptrias_prismaticas FROM ojo o WHERE o.Paciente_idPaciente =?  ");
             ps.setInt(1, this.paciente.getIdPaciente()); 
             rs = ps.executeQuery();
-            while(rs.next()){               
-                ojo.setDesviacionDerecha(rs.getFloat("desviacion_der"));
-                ojo.setDesviacionIzquierda(rs.getFloat("desviacion_izq"));
-                ojo.setDioptriasPrismaticas(rs.getFloat("dioptrias_prismaticas"));   
+            index = 0;
+            while(rs.next()){      
+                ojo.add(new Ojo(rs.getFloat("desviacion_der"), rs.getFloat("desviacion_izq"), rs.getFloat("dioptrias_prismaticas")));
+                index ++;
             }
             ps = con.prepareStatement("SELECT DISTINCT pre.fecha FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
             ps.setInt(1, this.paciente.getIdPaciente()); 
             rs = ps.executeQuery();
+            index = 0;
             while(rs.next()){
-                prediagnostico.setFecha(rs.getDate("fecha"));
+                prediagnostico.add(new Prediagnostico(rs.getDate("fecha")));
+                index ++;
             }           
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
@@ -389,22 +397,19 @@ public class Paciente extends javax.swing.JFrame {
 
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
 
+            int index = 0;
             while(rs.next()){ // para verificar si trae los datos de la consulta 
-                tratamineto.setTipoTratamiento(rs.getString("TipoDeTratamiento"));                
-                tratamineto.setPuntuacion(rs.getString("puntuacion"));
-                tratamineto.setDuracion(rs.getString("duraciontotal"));
-                tratamineto.setFecha(rs.getDate("fecha"));
-                especialista.setNombre(rs.getString("nombre"));
-                especialista.setApellidoPaterno(rs.getString("ap_paterno"));
-                especialista.setApellidoMaterno(rs.getString("ap_materno"));
+                tratamiento.add(new Tratamiento(rs.getString("TipoDeTratamiento"), rs.getString("puntuacion"), rs.getString("duraciontotal"), rs.getDate("fecha")));
+                especialista.add(new Especialista(rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno")));
+                index ++;
             } 
             flag = true;
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-            System.err.println("Erro en tratamiento detalles" + e);
+            System.err.println("Error en tratamiento detalles" + e);
         }
         if(flag){
-            Detalles detalles = new Detalles(especialista,paciente,ojo,diagnostico,tratamineto,prediagnostico);
+            Detalles detalles = new Detalles(this.especialista,paciente,especialista,ojo,diagnostico,tratamiento,prediagnostico);
             detalles.setVisible(true);
             dispose();
         }

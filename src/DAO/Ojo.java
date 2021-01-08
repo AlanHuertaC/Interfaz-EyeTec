@@ -19,6 +19,13 @@ public class Ojo {
     public  Ojo(){
         
     }
+
+    public Ojo(float desviacionDerecha, float desviacionIzquierda, float dioptriasPrismaticas) {
+        this.desviacionDerecha = desviacionDerecha;
+        this.desviacionIzquierda = desviacionIzquierda;
+        this.dioptriasPrismaticas = dioptriasPrismaticas;
+    }
+    
     public Ojo(float desviacionDerecha, float desviacionIzquierda, String caracteristicasDerecha, String caracteristicasIzquierda, float dioptriasPrismaticas) {
         this.desviacionDerecha = desviacionDerecha;
         this.desviacionIzquierda = desviacionIzquierda;

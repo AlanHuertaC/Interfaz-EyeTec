@@ -17,6 +17,10 @@ public class Prediagnostico {
     private int duracion;
     
     public Prediagnostico(){}
+
+    public Prediagnostico(Date fecha) {
+        this.fecha = fecha;
+    }
     
     public Prediagnostico(int idPrediagnostico, Date fecha, int duracion) {
         this.idPrediagnostico = idPrediagnostico;

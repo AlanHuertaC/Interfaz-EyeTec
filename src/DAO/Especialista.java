@@ -22,6 +22,13 @@ public class Especialista {
     
     public Especialista(){}
 
+    public Especialista(String nombre, String apellidoPaterno, String apellidoMaterno) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+    }
+
+    
     public Especialista(int idEspecialista, String nombre, String apellidoPaterno, String apellidoMaterno, String cedula, String sexo, int edad, String usuario, String contrasena) {
         this.idEspecialista = idEspecialista;
         this.nombre = nombre;

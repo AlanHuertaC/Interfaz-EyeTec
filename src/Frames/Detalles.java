@@ -28,13 +28,14 @@ import javax.swing.JTextArea;
  */
 public class Detalles extends javax.swing.JFrame {
     /*Clases*/
-    Especialista especialista;
-    DAO.Paciente paciente;
-    Ojo ojo; 
-    Diagnostico diagnostico;
-    Tratamiento tratamiento;
-    Prediagnostico prediagnostico;
-    
+    Especialista especialistaUnico = new Especialista();
+    DAO.Paciente paciente = new DAO.Paciente();
+    ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
+    ArrayList<Ojo> ojo = new ArrayList<Ojo>();
+    ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
+    ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
+    ArrayList<Especialista> especialista = new ArrayList<Especialista>();
+
     /*variables prediagnostico*/
     JPanel panelPre;
     JLabel textLabelPre[];
@@ -46,9 +47,10 @@ public class Detalles extends javax.swing.JFrame {
     JTextArea textAreaTra[];
     JScrollPane jScrollPaneTra[];
    
-    public Detalles(Especialista especialista, DAO.Paciente paciente, Ojo ojo, Diagnostico diagnostico, Tratamiento tratamiento, Prediagnostico prediagnostico){
-        this.especialista = especialista;
+    public Detalles(Especialista especialistaUnico,DAO.Paciente paciente, ArrayList<Especialista> especialista,ArrayList<Ojo> ojo ,  ArrayList<Diagnostico> diagnostico, ArrayList<Tratamiento> tratamiento, ArrayList<Prediagnostico> prediagnostico){
+        this.especialistaUnico = especialistaUnico;
         this.paciente = paciente;
+        this.especialista = especialista;
         this.ojo = ojo;
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
@@ -60,7 +62,7 @@ public class Detalles extends javax.swing.JFrame {
         /*Prediagnostico*/
         try{
             panelPre = new JPanel();        
-            int TamanoPre = Paciente.tipoStrabismo.size();
+            int TamanoPre =  this.diagnostico.size();//Paciente.tipoStrabismo.size();
 
             textLabelPre = new JLabel[TamanoPre+1];
             textAreaPre = new JTextArea[TamanoPre+1];
@@ -69,16 +71,16 @@ public class Detalles extends javax.swing.JFrame {
             for(int i=0; i<TamanoPre; i++){
                 jScrollPanePre[i] = new javax.swing.JScrollPane();
                 textLabelPre[i] = new JLabel();
-                textLabelPre[i].setText("Atendido por: " + Paciente.nombreEspecialista.get(i) + " " + Paciente.paternoEspecialista.get(i) + " " + Paciente.maternoEspecialista.get(i));
+                textLabelPre[i].setText("Atendido por: " + this.especialista.get(i).getNombre() + " " + this.especialista.get(i).getApellidoPaterno() + " " + this.especialista.get(i).getApellidoMaterno());
                 textLabelPre[i].setPreferredSize(new Dimension(25, 25));
 
                 textAreaPre[i] = new JTextArea();
                 textAreaPre[i].setEditable(false);
-                textAreaPre[i].setText("Tipo de estrabismo: " + Paciente.tipoStrabismo.get(i) + "\n" +"\n" +
-                                        "Desviación del Ojo Derecho: "+ Paciente.desviacionDer.get(i) + " º" +"\n"+ "\n"+
-                                        "Desviación del Ojo Izquierdo: "+ Paciente.desviacionIzq.get(i)+ " º" + "\n"+ "\n" +
-                                        "Dioptrías prismáticas: "+ Paciente.dioptrias.get(i) + "\n"+"\n"+
-                                        "Fecha de Realización: "+ Paciente.fecha.get(i) + "\n");
+                textAreaPre[i].setText("Tipo de estrabismo: " + this.diagnostico.get(i).getTipoEstrabismo() + "\n" +"\n" +
+                                        "Desviación del Ojo Derecho: "+ this.ojo.get(i).getDesviacionDerecha() + " º" +"\n"+ "\n"+
+                                        "Desviación del Ojo Izquierdo: "+ this.ojo.get(i).getDesviacionIzquierda() + " º" + "\n"+ "\n" +
+                                        "Dioptrías prismáticas: "+ this.ojo.get(i).getDioptriasPrismaticas() + "\n"+"\n"+
+                                        "Fecha de Realización: "+ this.prediagnostico.get(i).getFecha() + "\n");
 
                 jScrollPanePre[i].setViewportView(textAreaPre[i]);
                 javax.swing.GroupLayout panelPreLayout = new javax.swing.GroupLayout(panelPre);
@@ -95,7 +97,7 @@ public class Detalles extends javax.swing.JFrame {
         /*Tratamiento*/
         try{
             panelTra = new JPanel();        
-            int TamanoTra = Paciente.tipoTratamiento.size();
+            int TamanoTra = this.tratamiento.size();//Paciente.tipoTratamiento.size();
             
             textLabelTra = new JLabel[TamanoTra+1];
             textAreaTra = new JTextArea[TamanoTra+1];
@@ -104,28 +106,28 @@ public class Detalles extends javax.swing.JFrame {
             for(int i=0; i<TamanoTra; i++){
                 jScrollPaneTra[i] = new javax.swing.JScrollPane();
                 textLabelTra[i] = new JLabel();
-                textLabelTra[i].setText("Atendido por: " + Paciente.nombreEspecialistaT.get(i) + " " + Paciente.paternoEspecialistaT.get(i) + " " + Paciente.maternoEspecialistaT.get(i));
+                textLabelTra[i].setText("Atendido por: " + this.especialista.get(i).getNombre() + " " + this.especialista.get(i).getApellidoPaterno() + " " + this.especialista.get(i).getApellidoMaterno());
                 textLabelTra[i].setPreferredSize(new Dimension(25, 25));
                 
                 textAreaTra[i] = new JTextArea();
                 textAreaTra[i].setEditable(false);
                 String nombreTerapia  =""; //TODO: cambiar nombre dinamicamente
                 
-                if(Paciente.tipoTratamiento.get(i).equals("Manejo de Contrastes")){
+                if(this.tratamiento.get(i).getTipoTratamiento().equals("Manejo de Contrastes")){
                     nombreTerapia = "Juego CatVenge";
-                }else if(Paciente.tipoTratamiento.get(i).equals("Oclusión de objetos")){
+                }else if(this.tratamiento.get(i).getTipoTratamiento().equals("Oclusión de objetos")){
                     nombreTerapia = "Juego SpaceHero";
-                }else if(Paciente.tipoTratamiento.get(i).equals("Calentamiento")){
+                }else if(this.tratamiento.get(i).getTipoTratamiento().equals("Calentamiento")){
                     nombreTerapia = "Espacio Atmósferico";
-                }else if(Paciente.tipoTratamiento.get(i).equals("Relajación")){
+                }else if(this.tratamiento.get(i).getTipoTratamiento().equals("Relajación")){
                     nombreTerapia = "Lazy Sphere 2077";
                 }
                 
-                textAreaTra[i].setText("Tipo de Tratamiento: " + Paciente.tipoTratamiento.get(i) + "\n" +"\n" +
+                textAreaTra[i].setText("Tipo de Tratamiento: " + this.tratamiento.get(i).getTipoTratamiento() + "\n" +"\n" +
                                         "Nombre de la terapia visual: "+ nombreTerapia + "\n" + "\n"+
-                                        "Puntuación Obtenida: "+  Paciente.puntuacion.get(i) + "\n" + "\n"+
-                                        "Duración de la terapia: "+ Paciente.duracionTotal.get(i) + " min" +"\n"+ "\n"+                                        
-                                        "Fecha de Realización: "+ Paciente.fechaT.get(i) + "\n");
+                                        "Puntuación Obtenida: "+ this.tratamiento.get(i).getPuntuacion() + "\n" + "\n"+
+                                        "Duración de la terapia: "+ this.tratamiento.get(i).getDuracion() + " min" +"\n"+ "\n"+                                        
+                                        "Fecha de Realización: "+ this.tratamiento.get(i).getFecha() + "\n");
                 
                 jScrollPaneTra[i].setViewportView(textAreaTra[i]);
                 javax.swing.GroupLayout panelPreLayout = new javax.swing.GroupLayout(panelTra);
@@ -238,7 +240,7 @@ public class Detalles extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Paciente paciente = new Paciente();
+        Paciente paciente = new Paciente(this.especialistaUnico, this.paciente);
         paciente.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -273,13 +275,14 @@ public class Detalles extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Especialista especialista = new Especialista();
+                Especialista especialistaU = new Especialista();
                 DAO.Paciente paciente = new DAO.Paciente();
-                Ojo ojo = new Ojo();
-                Diagnostico diagnostico = new Diagnostico();
-                Tratamiento tratamiento = new Tratamiento();
-                 Prediagnostico prediagnostico = new Prediagnostico();
-                new Detalles(especialista,paciente,ojo,diagnostico,tratamiento,prediagnostico).setVisible(true);
+                ArrayList<Especialista> especialista = new ArrayList<Especialista>();
+                ArrayList<Ojo> ojo = new ArrayList<Ojo>();
+                ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
+                ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
+                ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
+                new Detalles(especialistaU,paciente,especialista,ojo,diagnostico,tratamiento,prediagnostico).setVisible(true);
             }
         });
     }

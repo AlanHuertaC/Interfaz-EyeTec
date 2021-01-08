@@ -24,6 +24,13 @@ public class Tratamiento {
         
     }
 
+    public Tratamiento(String tipoTratamiento, String puntuacion, String duracion, Date fecha) {
+        this.tipoTratamiento = tipoTratamiento;
+        this.puntuacion = puntuacion;
+        this.duracion = duracion;
+        this.fecha = fecha;
+    }
+
     public Tratamiento(int idTratamiento, String tipoTratamiento, String puntuacion, String duracion, Date fecha, String nivelMejora) {
         this.idTratamiento = idTratamiento;
         this.tipoTratamiento = tipoTratamiento;
