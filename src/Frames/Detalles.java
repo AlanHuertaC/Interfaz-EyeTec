@@ -10,14 +10,10 @@ import DAO.Especialista;
 import DAO.Ojo;
 import DAO.Prediagnostico;
 import DAO.Tratamiento;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -28,24 +24,13 @@ import javax.swing.JTextArea;
  */
 public class Detalles extends javax.swing.JFrame {
     /*Clases*/
-    Especialista especialistaUnico = new Especialista();
-    DAO.Paciente paciente = new DAO.Paciente();
-    ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
-    ArrayList<Ojo> ojo = new ArrayList<Ojo>();
-    ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
-    ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
-    ArrayList<Especialista> especialista = new ArrayList<Especialista>();
-
-    /*variables prediagnostico*/
-    JPanel panelPre;
-    JLabel textLabelPre[];
-    JTextArea textAreaPre[];
-    JScrollPane jScrollPanePre[];
-    /*variables Tratamiento*/
-    JPanel panelTra;
-    JLabel textLabelTra[];
-    JTextArea textAreaTra[];
-    JScrollPane jScrollPaneTra[];
+    Especialista especialistaUnico;
+    DAO.Paciente paciente;
+    ArrayList<Diagnostico> diagnostico;
+    ArrayList<Ojo> ojo;
+    ArrayList<Prediagnostico> prediagnostico;
+    ArrayList<Tratamiento> tratamiento;
+    ArrayList<Especialista> especialista;
    
     public Detalles(Especialista especialistaUnico,DAO.Paciente paciente, ArrayList<Especialista> especialista,ArrayList<Ojo> ojo ,  ArrayList<Diagnostico> diagnostico, ArrayList<Tratamiento> tratamiento, ArrayList<Prediagnostico> prediagnostico){
         this.especialistaUnico = especialistaUnico;
@@ -55,18 +40,24 @@ public class Detalles extends javax.swing.JFrame {
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
         this.prediagnostico = prediagnostico;
-        initComponents();
-        
+        initComponents();        
+        /*Detalles prediagnostico*/
+        detallesPrediagnostico();
+        /*Tratamiento*/
+        detallesTratamiento();
+    }
+       
+    private void detallesPrediagnostico(){
         /*Nombre del Paciente*/
         labelName.setText( this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
         /*Prediagnostico*/
         try{
-            panelPre = new JPanel();        
+            JPanel panelPre = new JPanel();        
             int TamanoPre =  this.diagnostico.size();//Paciente.tipoStrabismo.size();
 
-            textLabelPre = new JLabel[TamanoPre+1];
-            textAreaPre = new JTextArea[TamanoPre+1];
-            jScrollPanePre = new JScrollPane[TamanoPre+1];
+            JLabel textLabelPre[] = new JLabel[TamanoPre+1];
+            JTextArea textAreaPre[] = new JTextArea[TamanoPre+1];
+            JScrollPane jScrollPanePre[] = new JScrollPane[TamanoPre+1];
 
             for(int i=0; i<TamanoPre; i++){
                 jScrollPanePre[i] = new javax.swing.JScrollPane();
@@ -94,14 +85,16 @@ public class Detalles extends javax.swing.JFrame {
             //JOptionPane.showMessageDialog(null, "Vacio");
             System.out.println("Sin prediagnostico");
         }
-        /*Tratamiento*/
+    }
+    
+    private void detallesTratamiento(){
         try{
-            panelTra = new JPanel();        
+            JPanel panelTra = new JPanel();        
             int TamanoTra = this.tratamiento.size();//Paciente.tipoTratamiento.size();
             
-            textLabelTra = new JLabel[TamanoTra+1];
-            textAreaTra = new JTextArea[TamanoTra+1];
-            jScrollPaneTra = new JScrollPane[TamanoTra+1];
+            JLabel textLabelTra[] = new JLabel[TamanoTra+1];
+            JTextArea textAreaTra[] = new JTextArea[TamanoTra+1];
+            JScrollPane jScrollPaneTra[] = new JScrollPane[TamanoTra+1];
             
             for(int i=0; i<TamanoTra; i++){
                 jScrollPaneTra[i] = new javax.swing.JScrollPane();
@@ -141,17 +134,10 @@ public class Detalles extends javax.swing.JFrame {
         }    
     }
     
-    /*public void inicio(){ 
-        //textAreaPre = new JTextArea();
-        textAreaPre[0].setText("Tipo de estrabismo: " + Paciente.tipoStrabismo + "\n" +"\n" +
-                            "Desviación del Ojo Derecho: "+ Paciente.desviacionDer + " º" +"\n"+ "\n"+
-                            "Desviación del Ojo Izquierdo: "+ Paciente.desviacionIzq+ " º" + "\n"+ "\n" +
-                            "Dioptrías prismáticas: "+ Paciente.dioptrias + "\n"+"\n"+
-                            "Fecha de Realización: "+ Paciente.fecha + "\n");    
-    }*/
-    
-    public void set(){
-        
+    private void volverPaciente(){
+        Paciente paciente = new Paciente(this.especialistaUnico, this.paciente);
+        paciente.setVisible(true);
+        dispose();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -164,7 +150,7 @@ public class Detalles extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         labelName = new javax.swing.JLabel();
@@ -176,10 +162,10 @@ public class Detalles extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Detalles del paciente");
 
-        jButton1.setText("Volver");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
 
@@ -200,13 +186,13 @@ public class Detalles extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(labelName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(btnVolver)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -215,7 +201,7 @@ public class Detalles extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1)
+                    .addComponent(btnVolver)
                     .addComponent(labelName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,11 +225,9 @@ public class Detalles extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Paciente paciente = new Paciente(this.especialistaUnico, this.paciente);
-        paciente.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        volverPaciente();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -288,7 +272,7 @@ public class Detalles extends javax.swing.JFrame {
     }
      
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

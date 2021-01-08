@@ -7,7 +7,6 @@ package Frames;
 
 import Clases.Conexion;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -21,12 +20,12 @@ public class RegistroEspecialista extends javax.swing.JFrame {
     PreparedStatement ps;
     ResultSet rs;
     Conexion cone = new Conexion();
-    public boolean flag = false;
+    boolean flag = false;
     public RegistroEspecialista() {
         initComponents();
     }
     
-    public void registro(){
+    private void registrarPaciente(){
         Connection con = null;
         try{
             con = cone.getConexion(); //trae la conexion
@@ -57,6 +56,105 @@ public class RegistroEspecialista extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"No se pudo conectar" + e.toString());
         }
     }
+    
+    private void validarCamposVacios(){
+        if(comboSexo.getSelectedIndex() == 0){
+            JOptionPane.showMessageDialog(null, "Debe seleccionar su sexo");
+        }else
+        if(textNombre.getText().isEmpty() || textApPaterno.getText().isEmpty() 
+           || textApMaterno.getText().isEmpty() || textCedula.getText().isEmpty()
+           || textPassword.getText().isEmpty() || textConfirmPassword.getText().isEmpty() ){
+            JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
+        }else{
+            //JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
+            registrarPaciente();
+        }
+        /*int valorSpinner = (int) spinnerEdad.getValue();
+        if(valorSpinner <1){
+            JOptionPane.showMessageDialog(null, "No puede tener" + valorSpinner +"esa edad");
+        }*/
+    }
+    
+    private void volverLogin(){
+        Login login = new Login();
+        login.setVisible(true);
+        dispose();
+    }
+    
+    private void validarCampoNombre(){
+        if(textNombre.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Nombre");
+            flag = false;
+        }
+        else
+        if(!textNombre.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Nombre");
+            textNombre.setText("");            
+            flag = false;
+        }
+    }
+    
+    private void validarCampoApellidoPaterno(){
+        if(textApPaterno.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido paterno");
+            flag = false;
+        }
+        else
+        if(!textApPaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido paterno");
+            textApPaterno.setText("");
+            flag = false;
+        }
+    }
+    
+    private  void validarCampoApellidoMaterno(){
+        if(textApMaterno.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido materno");
+            flag = false;
+        }
+        else
+        if(!textApMaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido materno");
+            textApMaterno.setText("");
+            flag = false;
+        }
+    }
+    
+    private void validarCampoUsuario(){
+        if(textUsuario.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Usuario");
+            flag = false;
+        }
+        else
+        if(!textUsuario.getText().matches("[A-Za-z0-9À-ÿ\u00f1\u00d1 ]+") && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Usuario");
+            textUsuario.setText("");            
+            flag = false;
+        }
+    }
+    
+    private void validarCampoContrasena(){
+        if(textPassword.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Contraseña");
+            flag = false;
+        }
+        else
+        if (!textPassword.getText().matches("^[a-zA-Z0-9À-ÿ\u00f1\u00d1]+$") && flag == false){   
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar letras y numeros sin caracteres especiales o espacios");
+            textPassword.setText("");
+            flag = false;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,7 +177,7 @@ public class RegistroEspecialista extends javax.swing.JFrame {
         textApMaterno = new javax.swing.JTextField();
         comboSexo = new javax.swing.JComboBox<>();
         spinnerEdad = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -140,15 +238,15 @@ public class RegistroEspecialista extends javax.swing.JFrame {
 
         spinnerEdad.setModel(new javax.swing.SpinnerNumberModel(1, 1, 99, 1));
 
-        jButton1.setText("Volver");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnVolver.setText("Volver");
+        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButton1MouseEntered(evt);
+                btnVolverMouseEntered(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
 
@@ -222,7 +320,7 @@ public class RegistroEspecialista extends javax.swing.JFrame {
                         .addGap(0, 28, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRegistrar)))
                 .addContainerGap())
@@ -268,7 +366,7 @@ public class RegistroEspecialista extends javax.swing.JFrame {
                     .addComponent(textConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnVolver)
                     .addComponent(btnRegistrar))
                 .addContainerGap())
         );
@@ -293,109 +391,35 @@ public class RegistroEspecialista extends javax.swing.JFrame {
     }//GEN-LAST:event_textApPaternoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-
-        if(comboSexo.getSelectedIndex() == 0){
-            JOptionPane.showMessageDialog(null, "Debe seleccionar su sexo");
-        }else
-        if(textNombre.getText().isEmpty() || textApPaterno.getText().isEmpty() 
-           || textApMaterno.getText().isEmpty() || textCedula.getText().isEmpty()
-           || textPassword.getText().isEmpty() || textConfirmPassword.getText().isEmpty() ){
-            JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
-        }else{
-            //JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
-            registro();
-        }
-        /*int valorSpinner = (int) spinnerEdad.getValue();
-        if(valorSpinner <1){
-            JOptionPane.showMessageDialog(null, "No puede tener" + valorSpinner +"esa edad");
-        }*/
-       
+        validarCamposVacios();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Login login = new Login();
-        login.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        volverLogin();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     private void textNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNombreFocusLost
-        if(textNombre.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Nombre");
-            flag = false;
-        }
-        else
-        if(!textNombre.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Nombre");
-            textNombre.setText("");            
-            flag = false;
-        }
+        validarCampoNombre();
     }//GEN-LAST:event_textNombreFocusLost
 
     private void textApPaternoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textApPaternoFocusLost
-        if(textApPaterno.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido paterno");
-            flag = false;
-        }
-        else
-        if(!textApPaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido paterno");
-            textApPaterno.setText("");
-            flag = false;
-        }
+        validarCampoApellidoPaterno();
     }//GEN-LAST:event_textApPaternoFocusLost
 
     private void textApMaternoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textApMaternoFocusLost
-        if(textApMaterno.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido materno");
-            flag = false;
-        }
-        else
-        if(!textApMaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido materno");
-            textApMaterno.setText("");
-            flag = false;
-        }
+        validarCampoApellidoMaterno();
     }//GEN-LAST:event_textApMaternoFocusLost
 
-    private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
+    private void btnVolverMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseEntered
         flag = true;
-    }//GEN-LAST:event_jButton1MouseEntered
+    }//GEN-LAST:event_btnVolverMouseEntered
 
     private void textUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textUsuarioFocusLost
-        if(textUsuario.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Usuario");
-            flag = false;
-        }
-        else
-        if(!textUsuario.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Usuario");
-            textUsuario.setText("");            
-            flag = false;
-        }
+        validarCampoUsuario();
     }//GEN-LAST:event_textUsuarioFocusLost
 
     private void textPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textPasswordFocusLost
-         if(textPassword.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Contraseña");
-            flag = false;
-        }
-        else
-        if (!textPassword.getText().matches("^[a-zA-Z0-9À-ÿ\u00f1\u00d1]+$") && flag == false){   
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar letras y numeros sin caracteres especiales o espacios");
-            textPassword.setText("");
-            flag = false;
-        }
-        
+        validarCampoContrasena();
     }//GEN-LAST:event_textPasswordFocusLost
 
     private void textConfirmPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textConfirmPasswordFocusLost
@@ -445,8 +469,8 @@ public class RegistroEspecialista extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> comboSexo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

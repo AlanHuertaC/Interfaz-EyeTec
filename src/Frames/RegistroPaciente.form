@@ -69,7 +69,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="jButton2" min="-2" pref="98" max="-2" attributes="0"/>
+                              <Component id="btnVolver" min="-2" pref="98" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -84,7 +84,7 @@
                                       <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="textName" min="-2" pref="117" max="-2" attributes="0"/>
+                                      <Component id="textNombre" min="-2" pref="117" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -128,7 +128,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="textName" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="textNombre" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="dateChooserNacimiento" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -148,7 +148,7 @@
                       </Group>
                       <EmptySpace pref="38" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnVolver" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -187,9 +187,9 @@
                 <Property name="text" type="java.lang.String" value="Sexo:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="textName">
+            <Component class="javax.swing.JTextField" name="textNombre">
               <Events>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="textNameFocusLost"/>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="textNombreFocusLost"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="textApPaterno">
@@ -221,13 +221,13 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="btnVolver">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Regresar"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton2MouseEntered"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnVolverMouseEntered"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnGuardar">

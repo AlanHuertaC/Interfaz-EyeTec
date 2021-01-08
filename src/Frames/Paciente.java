@@ -15,7 +15,6 @@ import DAO.Ojo;
 import DAO.Prediagnostico;
 import DAO.Tratamiento;
 import java.awt.Color;
-import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,16 +43,15 @@ public class Paciente extends javax.swing.JFrame {
         textNombre.setText(this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
         btnTerapia.setVisible(false);
         btnDetails.setVisible(false);
-        comboTerapia.setVisible(false);
-        
+        comboTerapia.setVisible(false);        
         textSeleccion.setVisible(false);
         spinnerMinutos.setVisible(false);
-        
-        inicio();
         comboTerapia.getModel();
+        selecccionarPaciente();
+        
     }
    
-    public void inicio(){
+    private void selecccionarPaciente(){
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
         try{
@@ -95,6 +93,209 @@ public class Paciente extends javax.swing.JFrame {
             } 
         }catch(Exception e){
             
+        }
+    }
+    
+    private void iniciarPrediagnostico(){
+        Connection con = null;
+        Unity unity = new Unity();
+        try{
+            con = cone.getConexion(); 
+            /*Validar si ya se hizo un prediagnostico*/
+            ps = con.prepareStatement("SELECT * FROM diagnostico where Paciente_idPaciente = ?");
+            ps.setInt(1, this.paciente.getIdPaciente());
+  
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+            
+            if(rs.next()){ // para verificar si trae los datos de la consulta
+            int confirmacion = JOptionPane.showConfirmDialog(null, "Este paciente ya se ha realizado un prediagnostico, ¿Desea realizar otro?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            
+                if(confirmacion==0){
+                    /*Abrir Unity*/
+                    unity.OpenUnity();
+                }            
+            }else{
+                /*Abrir Unity*/
+                unity.OpenUnity();
+            }
+            ps.close();               
+            con.close(); // cerrar la conexion
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
+        }        
+    }
+    
+    private void volverBuscarPaciente(){
+        BuscarPaciente buscarPaciente = new BuscarPaciente(this.especialista);
+        buscarPaciente.setVisible(true);
+        dispose();
+    }
+    
+    private void iniciarTerapia(){
+        Border redline = BorderFactory.createLineBorder(Color.red);
+        Border whiteline = BorderFactory.createLineBorder(Color.white);
+        
+        boolean flag = false;
+        
+        if(comboTerapia.getSelectedIndex() == 1){
+            flag = true;
+            
+            if(flag && !spinnerMinutos.getValue().toString().equalsIgnoreCase("0")){
+                insertTiempoApi((int) spinnerMinutos.getValue()); // Insertar el tiempo en la BD
+                RunApps runapps = new RunApps();
+                runapps.OpenCalentamiento();
+                Mobizen mobizen = new Mobizen();
+                mobizen.OpenMobizen();
+                comboTerapia.setBorder(whiteline);
+            }else{
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un tiempo mayor a 0 para iniciar la terapia");
+            }           
+        }else if(comboTerapia.getSelectedIndex() == 2){
+            RunApps runapps = new RunApps();
+            runapps.OpenCatVenge();
+            Mobizen mobizen = new Mobizen();
+            comboTerapia.setBorder(whiteline);
+            mobizen.OpenMobizen();
+            flag = false;
+            
+            
+        }else if(comboTerapia.getSelectedIndex() == 3){
+            RunApps runapps = new RunApps();
+            runapps.OpenSpaceHero();
+            Mobizen mobizen = new Mobizen();
+            mobizen.OpenMobizen();
+            comboTerapia.setBorder(whiteline);
+            flag = false;
+            
+            
+        }else if(comboTerapia.getSelectedIndex() == 4){
+            flag = true;
+            
+            if(flag && !spinnerMinutos.getValue().toString().equalsIgnoreCase("0")){
+                insertTiempoApi((int) spinnerMinutos.getValue());// Insertar el tiempo en la BD
+                RunApps runapps = new RunApps();
+                runapps.OpenRelajacion();
+                Mobizen mobizen = new Mobizen();
+                mobizen.OpenMobizen();
+                comboTerapia.setBorder(whiteline);
+            }else{
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un tiempo mayor a 0 para iniciar la terapia");
+            }        
+      
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una terapia");
+            comboTerapia.setBorder(redline);
+        }
+        //nombreTerapia = comboTerapia.getSelectedItem().toString();
+        //System.out.println("Se ha seleccionado: " + nombreTerapia);
+       //dispose();
+    }
+    
+    private void abrirDetalles(){
+        Connection con = null;
+        con = cone.getConexion(); //trae la conexion
+        /*Datos del prediagnostico*/          
+        ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
+        ArrayList<Ojo> ojo = new ArrayList<Ojo>();
+        ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
+        ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
+        
+        ArrayList<Especialista> especialista = new ArrayList<Especialista>();
+        //ArrayList<DAO.Paciente> paciente = new ArrayList<DAO.Paciente>();
+
+        /**/
+        boolean flag = false;
+        
+        try{
+            ps = con.prepareStatement("SELECT DISTINCT tipo_estrabismo, nombre, ap_paterno, ap_materno FROM Diagnostico d, Especialista e WHERE d.Paciente_idPaciente =? and d.Especialista_idEspecialista = e.idEspecialista");
+            ps.setInt(1, this.paciente.getIdPaciente());            
+  
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+            int index = 0;
+            while(rs.next()){ // para verificar si trae los datos de la consulta  
+                diagnostico.add(new Diagnostico(rs.getString("tipo_estrabismo")));
+                especialista.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
+                
+                //System.out.println("F: " + diagnostico.get(0).getTipoEstrabismo());
+                index ++;
+            }
+            ps = con.prepareStatement("SELECT DISTINCT o.desviacion_der, o.desviacion_izq, o.dioptrias_prismaticas FROM ojo o WHERE o.Paciente_idPaciente =?  ");
+            ps.setInt(1, this.paciente.getIdPaciente()); 
+            rs = ps.executeQuery();
+            index = 0;
+            while(rs.next()){      
+                ojo.add(new Ojo(rs.getFloat("desviacion_der"), rs.getFloat("desviacion_izq"), rs.getFloat("dioptrias_prismaticas")));
+                index ++;
+            }
+            ps = con.prepareStatement("SELECT DISTINCT pre.fecha FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
+            ps.setInt(1, this.paciente.getIdPaciente()); 
+            rs = ps.executeQuery();
+            index = 0;
+            while(rs.next()){
+                prediagnostico.add(new Prediagnostico(rs.getDate("fecha")));
+                index ++;
+            }           
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
+            System.err.println(e);
+        }
+        
+        /*Datos del tratamiento*/
+        
+        try{
+            ps = con.prepareStatement("SELECT DISTINCT TipoDeTratamiento, puntuacion, duraciontotal, fecha, nombre, ap_paterno, ap_materno FROM Tratamiento t, Especialista e WHERE t.Paciente_idPaciente =? and t.Especialista_idEspecialista = e.idEspecialista");
+            ps.setInt(1, this.paciente.getIdPaciente());            
+
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+
+            int index = 0;
+            while(rs.next()){ // para verificar si trae los datos de la consulta 
+                tratamiento.add(new Tratamiento(rs.getString("TipoDeTratamiento"), rs.getString("puntuacion"), rs.getString("duraciontotal"), rs.getDate("fecha")));
+                especialista.add(new Especialista(rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno")));
+                index ++;
+            } 
+            flag = true;
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
+            System.err.println("Error en tratamiento detalles" + e);
+        }
+        if(flag){
+            Detalles detalles = new Detalles(this.especialista,paciente,especialista,ojo,diagnostico,tratamiento,prediagnostico);
+            detalles.setVisible(true);
+            dispose();
+        }
+    }
+    
+    private void seleccionarTerapia(){
+        Border redline = BorderFactory.createLineBorder(Color.red);
+        Border whiteline = BorderFactory.createLineBorder(Color.white);
+        if(comboTerapia.getSelectedIndex() == 1){
+            //flag = true;
+            textSeleccion.setVisible(true);
+            spinnerMinutos.setVisible(true);
+            comboTerapia.setBorder(whiteline);
+              
+        }else if(comboTerapia.getSelectedIndex() == 2){
+            
+            textSeleccion.setVisible(false);
+            spinnerMinutos.setVisible(false);
+            comboTerapia.setBorder(whiteline);
+            
+        }else if(comboTerapia.getSelectedIndex() == 3){
+            
+            textSeleccion.setVisible(false);
+            spinnerMinutos.setVisible(false);
+            comboTerapia.setBorder(whiteline);
+            
+        }else if(comboTerapia.getSelectedIndex() == 4){
+           
+            textSeleccion.setVisible(true);
+            spinnerMinutos.setVisible(true);
+            comboTerapia.setBorder(whiteline);
+      
+        }else{
+            //JOptionPane.showMessageDialog(null, "Debe seleccionar una terapia");
+            comboTerapia.setBorder(redline);
         }
     }
 
@@ -244,208 +445,24 @@ public class Paciente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiagnosticoActionPerformed
-        Connection con = null;
-        Unity unity = new Unity();
-        try{
-            con = cone.getConexion(); 
-            /*Validar si ya se hizo un prediagnostico*/
-            ps = con.prepareStatement("SELECT * FROM diagnostico where Paciente_idPaciente = ?");
-            ps.setInt(1, this.paciente.getIdPaciente());
-  
-            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
-            
-            if(rs.next()){ // para verificar si trae los datos de la consulta
-            int confirmacion = JOptionPane.showConfirmDialog(null, "Este paciente ya se ha realizado un prediagnostico, ¿Desea realizar otro?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            
-                if(confirmacion==0){
-                    /*Abrir Unity*/
-                    unity.OpenUnity();
-                }            
-            }else{
-                /*Abrir Unity*/
-                unity.OpenUnity();
-            }
-            ps.close();               
-            con.close(); // cerrar la conexion
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-        }        
-       
+        iniciarPrediagnostico();       
         //dispose();
     }//GEN-LAST:event_btnDiagnosticoActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        BuscarPaciente buscarPaciente = new BuscarPaciente(this.especialista);
-        buscarPaciente.setVisible(true);
-        dispose();
+       volverBuscarPaciente();
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnTerapiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerapiaActionPerformed
-        Border redline = BorderFactory.createLineBorder(Color.red);
-        Border whiteline = BorderFactory.createLineBorder(Color.white);
-        
-        boolean flag = false;
-        
-        if(comboTerapia.getSelectedIndex() == 1){
-            flag = true;
-            
-            if(flag && !spinnerMinutos.getValue().toString().equalsIgnoreCase("0")){
-                insertTiempoApi((int) spinnerMinutos.getValue()); // Insertar el tiempo en la BD
-                RunApps runapps = new RunApps();
-                runapps.OpenCalentamiento();
-                Mobizen mobizen = new Mobizen();
-                mobizen.OpenMobizen();
-                comboTerapia.setBorder(whiteline);
-            }else{
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un tiempo mayor a 0 para iniciar la terapia");
-            }           
-        }else if(comboTerapia.getSelectedIndex() == 2){
-            RunApps runapps = new RunApps();
-            runapps.OpenCatVenge();
-            Mobizen mobizen = new Mobizen();
-            comboTerapia.setBorder(whiteline);
-            mobizen.OpenMobizen();
-            flag = false;
-            
-            
-        }else if(comboTerapia.getSelectedIndex() == 3){
-            RunApps runapps = new RunApps();
-            runapps.OpenSpaceHero();
-            Mobizen mobizen = new Mobizen();
-            mobizen.OpenMobizen();
-            comboTerapia.setBorder(whiteline);
-            flag = false;
-            
-            
-        }else if(comboTerapia.getSelectedIndex() == 4){
-            flag = true;
-            
-            if(flag && !spinnerMinutos.getValue().toString().equalsIgnoreCase("0")){
-                insertTiempoApi((int) spinnerMinutos.getValue());// Insertar el tiempo en la BD
-                RunApps runapps = new RunApps();
-                runapps.OpenRelajacion();
-                Mobizen mobizen = new Mobizen();
-                mobizen.OpenMobizen();
-                comboTerapia.setBorder(whiteline);
-            }else{
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un tiempo mayor a 0 para iniciar la terapia");
-            }        
-      
-        }else{
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una terapia");
-            comboTerapia.setBorder(redline);
-        }
-        //nombreTerapia = comboTerapia.getSelectedItem().toString();
-        //System.out.println("Se ha seleccionado: " + nombreTerapia);
-       //dispose();
+       iniciarTerapia();
     }//GEN-LAST:event_btnTerapiaActionPerformed
 
     private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
-        Connection con = null;
-        con = cone.getConexion(); //trae la conexion
-        /*Datos del prediagnostico*/          
-        ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
-        ArrayList<Ojo> ojo = new ArrayList<Ojo>();
-        ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
-        ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
-        
-        ArrayList<Especialista> especialista = new ArrayList<Especialista>();
-        //ArrayList<DAO.Paciente> paciente = new ArrayList<DAO.Paciente>();
-
-        /**/
-        boolean flag = false;
-        
-        try{
-            ps = con.prepareStatement("SELECT DISTINCT tipo_estrabismo, nombre, ap_paterno, ap_materno FROM Diagnostico d, Especialista e WHERE d.Paciente_idPaciente =? and d.Especialista_idEspecialista = e.idEspecialista");
-            ps.setInt(1, this.paciente.getIdPaciente());            
-  
-            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
-            int index = 0;
-            while(rs.next()){ // para verificar si trae los datos de la consulta  
-                diagnostico.add(new Diagnostico(rs.getString("tipo_estrabismo")));
-                especialista.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
-                
-                //System.out.println("F: " + diagnostico.get(0).getTipoEstrabismo());
-                index ++;
-            }
-            ps = con.prepareStatement("SELECT DISTINCT o.desviacion_der, o.desviacion_izq, o.dioptrias_prismaticas FROM ojo o WHERE o.Paciente_idPaciente =?  ");
-            ps.setInt(1, this.paciente.getIdPaciente()); 
-            rs = ps.executeQuery();
-            index = 0;
-            while(rs.next()){      
-                ojo.add(new Ojo(rs.getFloat("desviacion_der"), rs.getFloat("desviacion_izq"), rs.getFloat("dioptrias_prismaticas")));
-                index ++;
-            }
-            ps = con.prepareStatement("SELECT DISTINCT pre.fecha FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
-            ps.setInt(1, this.paciente.getIdPaciente()); 
-            rs = ps.executeQuery();
-            index = 0;
-            while(rs.next()){
-                prediagnostico.add(new Prediagnostico(rs.getDate("fecha")));
-                index ++;
-            }           
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-            System.err.println(e);
-        }
-        
-        /*Datos del tratamiento*/
-        
-        try{
-            ps = con.prepareStatement("SELECT DISTINCT TipoDeTratamiento, puntuacion, duraciontotal, fecha, nombre, ap_paterno, ap_materno FROM Tratamiento t, Especialista e WHERE t.Paciente_idPaciente =? and t.Especialista_idEspecialista = e.idEspecialista");
-            ps.setInt(1, this.paciente.getIdPaciente());            
-
-            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
-
-            int index = 0;
-            while(rs.next()){ // para verificar si trae los datos de la consulta 
-                tratamiento.add(new Tratamiento(rs.getString("TipoDeTratamiento"), rs.getString("puntuacion"), rs.getString("duraciontotal"), rs.getDate("fecha")));
-                especialista.add(new Especialista(rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno")));
-                index ++;
-            } 
-            flag = true;
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-            System.err.println("Error en tratamiento detalles" + e);
-        }
-        if(flag){
-            Detalles detalles = new Detalles(this.especialista,paciente,especialista,ojo,diagnostico,tratamiento,prediagnostico);
-            detalles.setVisible(true);
-            dispose();
-        }
+        abrirDetalles();
     }//GEN-LAST:event_btnDetailsActionPerformed
 
     private void comboTerapiaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboTerapiaItemStateChanged
-        Border redline = BorderFactory.createLineBorder(Color.red);
-        Border whiteline = BorderFactory.createLineBorder(Color.white);
-        if(comboTerapia.getSelectedIndex() == 1){
-            //flag = true;
-            textSeleccion.setVisible(true);
-            spinnerMinutos.setVisible(true);
-            comboTerapia.setBorder(whiteline);
-              
-        }else if(comboTerapia.getSelectedIndex() == 2){
-            
-            textSeleccion.setVisible(false);
-            spinnerMinutos.setVisible(false);
-            comboTerapia.setBorder(whiteline);
-            
-        }else if(comboTerapia.getSelectedIndex() == 3){
-            
-            textSeleccion.setVisible(false);
-            spinnerMinutos.setVisible(false);
-            comboTerapia.setBorder(whiteline);
-            
-        }else if(comboTerapia.getSelectedIndex() == 4){
-           
-            textSeleccion.setVisible(true);
-            spinnerMinutos.setVisible(true);
-            comboTerapia.setBorder(whiteline);
-      
-        }else{
-            //JOptionPane.showMessageDialog(null, "Debe seleccionar una terapia");
-            comboTerapia.setBorder(redline);
-        }
+        seleccionarTerapia();
     }//GEN-LAST:event_comboTerapiaItemStateChanged
 
     /**

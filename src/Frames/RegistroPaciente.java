@@ -6,9 +6,7 @@
 package Frames;
 
 import Clases.Conexion;
-import Clases.Unity;
 import DAO.Especialista;
-import com.toedter.calendar.JDateChooser;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -40,7 +38,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
         System.out.println("El id del especialista ingresado es: " + this.idEspecialista);
     }
     
-    public void registroPaciente(){
+    private void registroPaciente(){
         Connection con = null;
          
         Calendar cal = dateChooserNacimiento.getCalendar();
@@ -50,7 +48,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
         try{
             con = cone.getConexion(); //trae la conexion
             ps = con.prepareStatement("Insert INTO Paciente (nombre,ap_paterno,ap_materno,sexo,fecha_nacimiento,email) VALUES(?,?,?,?,?,?)"); // para insertar valores a mi tabla
-            ps.setString(1,textName.getText()); // (indice desde el cual va empezar osea la clave, guarda el texto que esta en el text Field)
+            ps.setString(1,textNombre.getText()); // (indice desde el cual va empezar osea la clave, guarda el texto que esta en el text Field)
             ps.setString(2,textApPaterno.getText());
             ps.setString(3, textApMaterno.getText());
             ps.setString(4, comboSexo.getSelectedItem().toString());
@@ -74,7 +72,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
         /*Seleccion del paciente para obtener su id*/
         try{
             ps = con.prepareStatement("SELECT * FROM paciente where nombre = ? and ap_paterno = ? and ap_materno = ?");
-            ps.setString(1, textName.getText());
+            ps.setString(1, textNombre.getText());
             ps.setString(2, textApPaterno.getText());
             ps.setString(3,textApMaterno.getText());
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
@@ -146,7 +144,77 @@ public class RegistroPaciente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
         }*/        
     }
-
+    
+    private void volverBusquedaPaciente(){
+         BuscarPaciente buscarPaciente = new BuscarPaciente(especialista);
+        buscarPaciente.setVisible(true);
+        dispose();
+    }
+    
+    private void validarCampoNombre(){
+        if(textNombre.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Nombre");
+            flag = false;
+        }
+        else if(!textNombre.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Nombre");
+            textNombre.setText("");            
+            flag = false;
+        }
+    }
+    
+    private void validarCampoApellidoPaterno(){
+        if(textApPaterno.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido paterno");
+            flag = false;
+        }else
+        if(!textApPaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+          flag = true;
+          JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido paterno");
+          textApPaterno.setText("");            
+          flag = false;
+        }
+    }
+    
+    private void validarCampoApellidoMaterno(){
+        if(textApMaterno.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido materno");
+            flag = false;
+        }else
+        if(!textApMaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
+          flag = true;
+          JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido materno");
+          textApMaterno.setText("");            
+          flag = false;
+        }
+    }
+    
+    private void validarCampoEmail(){
+        if(textEmail.getText().isEmpty() && flag == false){
+            flag = true;
+            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Email");
+            flag = false;
+        }else
+        if(!textEmail.getText().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$") && flag == false){
+          flag = true;
+          JOptionPane.showMessageDialog(null,"Debe ingresar el formato correcto en el campo Email");
+          textEmail.setText("");            
+          flag = false;
+        }
+    }
+    
+    private void LimpiarCajas(){
+        textNombre.setText("");
+        textApPaterno.setText("");
+        textApMaterno.setText("");
+        comboSexo.setSelectedIndex(0);
+        textEmail.setText("");
+        dateChooserNacimiento.setCalendar(null);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -164,12 +232,12 @@ public class RegistroPaciente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        textName = new javax.swing.JTextField();
+        textNombre = new javax.swing.JTextField();
         textApPaterno = new javax.swing.JTextField();
         textEmail = new javax.swing.JTextField();
         textApMaterno = new javax.swing.JTextField();
         comboSexo = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         dateChooserNacimiento = new com.toedter.calendar.JDateChooser();
 
@@ -190,9 +258,9 @@ public class RegistroPaciente extends javax.swing.JFrame {
 
         jLabel6.setText("Sexo:");
 
-        textName.addFocusListener(new java.awt.event.FocusAdapter() {
+        textNombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                textNameFocusLost(evt);
+                textNombreFocusLost(evt);
             }
         });
 
@@ -216,15 +284,15 @@ public class RegistroPaciente extends javax.swing.JFrame {
 
         comboSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione su sexo", "masculino", "femenino" }));
 
-        jButton2.setText("Regresar");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnVolver.setText("Regresar");
+        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButton2MouseEntered(evt);
+                btnVolverMouseEntered(evt);
             }
         });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
 
@@ -247,7 +315,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGuardar))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -260,7 +328,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                                 .addGap(41, 41, 41)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textName, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -291,7 +359,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jLabel4)
-                        .addComponent(textName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(textNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(dateChooserNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -307,7 +375,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                     .addComponent(comboSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnVolver)
                     .addComponent(btnGuardar))
                 .addContainerGap())
         );
@@ -342,7 +410,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
          if(comboSexo.getSelectedIndex() == 0){
             JOptionPane.showMessageDialog(null, "Debe seleccionar su sexo");
         }
-        else if(textName.getText().isEmpty() || textApPaterno.getText().isEmpty() || textApMaterno.getText().isEmpty()
+        else if(textNombre.getText().isEmpty() || textApPaterno.getText().isEmpty() || textApMaterno.getText().isEmpty()
             || textEmail.getText().isEmpty() || dateChooserNacimiento.getCalendar() == null){
             JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
         }else{
@@ -351,82 +419,30 @@ public class RegistroPaciente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        BuscarPaciente buscarPaciente = new BuscarPaciente(especialista);
-        buscarPaciente.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+       volverBusquedaPaciente();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void textNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNameFocusLost
-        if(textName.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Nombre");
-            flag = false;
-        }
-        else if(!textName.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Nombre");
-            textName.setText("");            
-            flag = false;
-        }
-    }//GEN-LAST:event_textNameFocusLost
+    private void textNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNombreFocusLost
+       validarCampoNombre();
+    }//GEN-LAST:event_textNombreFocusLost
 
     private void textApPaternoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textApPaternoFocusLost
-        if(textApPaterno.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido paterno");
-            flag = false;
-        }else
-        if(!textApPaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-          flag = true;
-          JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido paterno");
-          textApPaterno.setText("");            
-          flag = false;
-        }
+        validarCampoApellidoPaterno();
     }//GEN-LAST:event_textApPaternoFocusLost
 
     private void textApMaternoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textApMaternoFocusLost
-        if(textApMaterno.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido materno");
-            flag = false;
-        }else
-        if(!textApMaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-          flag = true;
-          JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido materno");
-          textApMaterno.setText("");            
-          flag = false;
-        }
+        validarCampoApellidoMaterno();
     }//GEN-LAST:event_textApMaternoFocusLost
 
     private void textEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textEmailFocusLost
-        if(textEmail.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Email");
-            flag = false;
-        }else
-        if(!textEmail.getText().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$") && flag == false){
-          flag = true;
-          JOptionPane.showMessageDialog(null,"Debe ingresar el formato correcto en el campo Email");
-          textEmail.setText("");            
-          flag = false;
-        }
-        
+        validarCampoEmail();
     }//GEN-LAST:event_textEmailFocusLost
 
-    private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseEntered
+    private void btnVolverMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseEntered
         flag = true;
-    }//GEN-LAST:event_jButton2MouseEntered
-    
-    public void LimpiarCajas(){
-        textName.setText("");
-        textApPaterno.setText("");
-        textApMaterno.setText("");
-        comboSexo.setSelectedIndex(0);
-        textEmail.setText("");
-        dateChooserNacimiento.setCalendar(null);
-    }
-            
+    }//GEN-LAST:event_btnVolverMouseEntered
+           
     /**
      * @param args the command line arguments
      */
@@ -466,9 +482,9 @@ public class RegistroPaciente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> comboSexo;
     private com.toedter.calendar.JDateChooser dateChooserNacimiento;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -480,6 +496,6 @@ public class RegistroPaciente extends javax.swing.JFrame {
     private javax.swing.JTextField textApMaterno;
     private javax.swing.JTextField textApPaterno;
     private javax.swing.JTextField textEmail;
-    private javax.swing.JTextField textName;
+    private javax.swing.JTextField textNombre;
     // End of variables declaration//GEN-END:variables
 }
