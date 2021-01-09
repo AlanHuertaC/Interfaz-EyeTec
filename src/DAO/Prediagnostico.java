@@ -15,6 +15,7 @@ public class Prediagnostico {
    
     private Date fecha;
     private int duracion;
+    private String tipoEstrabismo;
     private float desviacionDerecha;
     private float desviacionIzquierda;
     private String caracteristicasDerecha;
@@ -23,9 +24,10 @@ public class Prediagnostico {
     
     public Prediagnostico(){}
 
-    public Prediagnostico(Date fecha, int duracion, float desviacionDerecha, float desviacionIzquierda, String caracteristicasDerecha, String caracteristicasIzquierda, float dioptriasPrismaticas) {
+    public Prediagnostico(Date fecha, int duracion, String tipoEstrabismo, float desviacionDerecha, float desviacionIzquierda, String caracteristicasDerecha, String caracteristicasIzquierda, float dioptriasPrismaticas) {
         this.fecha = fecha;
         this.duracion = duracion;
+        this.tipoEstrabismo = tipoEstrabismo;
         this.desviacionDerecha = desviacionDerecha;
         this.desviacionIzquierda = desviacionIzquierda;
         this.caracteristicasDerecha = caracteristicasDerecha;
@@ -33,11 +35,13 @@ public class Prediagnostico {
         this.dioptriasPrismaticas = dioptriasPrismaticas;
     }
 
-    public Prediagnostico(Date fecha, float desviacionDerecha, float desviacionIzquierda, float dioptriasPrismaticas) {
+
+    public Prediagnostico(Date fecha, String tipoEstrabismo, float desviacionDerecha, float desviacionIzquierda, float dioptriasPrismaticas) {
         this.fecha = fecha;
         this.desviacionDerecha = desviacionDerecha;
         this.desviacionIzquierda = desviacionIzquierda;
         this.dioptriasPrismaticas = dioptriasPrismaticas;
+        this.tipoEstrabismo = tipoEstrabismo;
     }
 
     public Date getFecha() {
@@ -94,6 +98,14 @@ public class Prediagnostico {
 
     public void setDioptriasPrismaticas(float dioptriasPrismaticas) {
         this.dioptriasPrismaticas = dioptriasPrismaticas;
+    }
+
+    public String getTipoEstrabismo() {
+        return tipoEstrabismo;
+    }
+
+    public void setTipoEstrabismo(String tipoEstrabismo) {
+        this.tipoEstrabismo = tipoEstrabismo;
     }
     
 }

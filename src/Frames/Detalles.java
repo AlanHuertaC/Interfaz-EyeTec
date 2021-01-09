@@ -48,14 +48,14 @@ public class Detalles extends javax.swing.JFrame {
         /*Nombre del Paciente*/
         labelName.setText( this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
         /*Prediagnostico*/
+       
         try{
             JPanel panelPre = new JPanel();        
-            int TamanoPre =  this.diagnostico.size();//Paciente.tipoStrabismo.size();
-
+            int TamanoPre =  this.prediagnostico.size();
             JLabel textLabelPre[] = new JLabel[TamanoPre+1];
             JTextArea textAreaPre[] = new JTextArea[TamanoPre+1];
             JScrollPane jScrollPanePre[] = new JScrollPane[TamanoPre+1];
-
+            
             for(int i=0; i<TamanoPre; i++){
                 jScrollPanePre[i] = new javax.swing.JScrollPane();
                 textLabelPre[i] = new JLabel();
@@ -64,24 +64,28 @@ public class Detalles extends javax.swing.JFrame {
 
                 textAreaPre[i] = new JTextArea();
                 textAreaPre[i].setEditable(false);
-                textAreaPre[i].setText("Tipo de estrabismo: " + this.diagnostico.get(i).getTipoEstrabismo() + "\n" +"\n" +
+                textAreaPre[i].setText("Tipo de estrabismo: " + this.prediagnostico.get(i).getTipoEstrabismo() + "\n" +"\n" +
                                         "Desviación del Ojo Derecho: "+ this.prediagnostico.get(i).getDesviacionDerecha() + " º" +"\n"+ "\n"+
-                                        "Desviación del Ojo Izquierdo: "+ this.prediagnostico.get(i).getCaracteristicasIzquierda() + " º" + "\n"+ "\n" +
+                                        "Desviación del Ojo Izquierdo: "+ this.prediagnostico.get(i).getDesviacionIzquierda() + " º" + "\n"+ "\n" +
                                         "Dioptrías prismáticas: "+ this.prediagnostico.get(i).getDioptriasPrismaticas() + "\n"+"\n"+
                                         "Fecha de Realización: "+ this.prediagnostico.get(i).getFecha() + "\n");
-
+                
                 jScrollPanePre[i].setViewportView(textAreaPre[i]);
                 javax.swing.GroupLayout panelPreLayout = new javax.swing.GroupLayout(panelPre);
                 panelPre.setLayout(new BoxLayout(panelPre,BoxLayout.Y_AXIS));    
                 panelPre.add(textLabelPre[i]);
-                panelPre.add(jScrollPanePre[i]);
-            }
-
+                panelPre.add(jScrollPanePre[i]); 
+            } 
             jScrollPane1.setViewportView(panelPre);
         }catch(Exception e){ 
             //JOptionPane.showMessageDialog(null, "Vacio");
-            System.out.println("Sin prediagnostico");
+            System.out.println("Sin prediagnostico" + e);
         }
+        /*int TamanoPre =  this.prediagnostico.size();
+        for(int i=0; i<TamanoPre; i++){
+            System.err.println(this.prediagnostico.get(i).getTipoEstrabismo());
+        }*/
+        
     }
     
     private void detallesTratamiento(){
@@ -113,10 +117,14 @@ public class Detalles extends javax.swing.JFrame {
                     nombreTerapia = "Lazy Sphere 2077";
                 }
                 
+                String unidadesTiempo="minutos";
+                if(this.tratamiento.get(i).getDuracion().substring(0, 2).equalsIgnoreCase("00"))
+                    unidadesTiempo = "segundos";
+                
                 textAreaTra[i].setText("Tipo de Tratamiento: " + this.tratamiento.get(i).getTipoTratamiento() + "\n" +"\n" +
                                         "Nombre de la terapia visual: "+ nombreTerapia + "\n" + "\n"+
                                         "Puntuación Obtenida: "+ this.tratamiento.get(i).getPuntuacion() + "\n" + "\n"+
-                                        "Duración de la terapia: "+ this.tratamiento.get(i).getDuracion() + " min" +"\n"+ "\n"+                                        
+                                        "Duración de la terapia: "+ this.tratamiento.get(i).getDuracion() + " " + unidadesTiempo +"\n"+ "\n"+                                        
                                         "Fecha de Realización: "+ this.tratamiento.get(i).getFecha() + "\n");
                 
                 jScrollPaneTra[i].setViewportView(textAreaTra[i]);

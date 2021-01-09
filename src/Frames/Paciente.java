@@ -54,7 +54,7 @@ public class Paciente extends javax.swing.JFrame {
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
         try{
-            ps = con.prepareStatement("SELECT * FROM diagnostico where Paciente_idPaciente = ?");
+            ps = con.prepareStatement("SELECT * FROM prediagnostico where Paciente_idPaciente = ?");
             ps.setInt(1, this.paciente.getIdPaciente());
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
@@ -101,7 +101,7 @@ public class Paciente extends javax.swing.JFrame {
         try{
             con = cone.getConexion(); 
             /*Validar si ya se hizo un prediagnostico*/
-            ps = con.prepareStatement("SELECT * FROM diagnostico where Paciente_idPaciente = ?");
+            ps = con.prepareStatement("SELECT * FROM prediagnostico where Paciente_idPaciente = ?");
             ps.setInt(1, this.paciente.getIdPaciente());
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
@@ -204,24 +204,23 @@ public class Paciente extends javax.swing.JFrame {
         boolean flag = false;
         
         try{
-            ps = con.prepareStatement("SELECT DISTINCT tipo_estrabismo, nombre, ap_paterno, ap_materno FROM Diagnostico d, Especialista e WHERE d.Paciente_idPaciente =? and d.Especialista_idEspecialista = e.idEspecialista");
+            ps = con.prepareStatement("SELECT nombre, ap_paterno, ap_materno FROM Especialista e, Prediagnostico p WHERE p.Paciente_idPaciente =? AND e.idEspecialista = p.Especialista_idEspecialista");
             ps.setInt(1, this.paciente.getIdPaciente());            
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             int index = 0;
             while(rs.next()){ // para verificar si trae los datos de la consulta  
-                diagnostico.add(new Diagnostico(rs.getString("tipo_estrabismo")));
                 especialista.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
-                
                 index ++;
             }
-            ps = con.prepareStatement("SELECT DISTINCT pre.fecha, pre.desviacion_der, pre.desviacion_izq, pre.dioptrias_prismaticas FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
+            ps = con.prepareStatement("SELECT DISTINCT pre.fecha, tipo_estrabismo, pre.desviacion_der, pre.desviacion_izq, pre.dioptrias_prismaticas FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
             ps.setInt(1, this.paciente.getIdPaciente()); 
             rs = ps.executeQuery();
             index = 0;
             while(rs.next()){
-                prediagnostico.add(new Prediagnostico(rs.getDate("fecha"),rs.getFloat("desviacion_der"),rs.getFloat("desviacion_izq"),rs.getFloat("dioptrias_prismaticas")));
+                prediagnostico.add(new Prediagnostico(rs.getDate("fecha"), rs.getString("tipo_estrabismo") ,rs.getFloat("desviacion_der"),rs.getFloat("desviacion_izq"),rs.getFloat("dioptrias_prismaticas")));
                 index ++;
+                
             }           
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
@@ -350,7 +349,7 @@ public class Paciente extends javax.swing.JFrame {
             }
         });
 
-        comboTerapia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione la terapia", "Calentamiento", "Manejo de contraste", "Oclución de objetos", "Relajación" }));
+        comboTerapia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione la terapia", "Calentamiento", "Manejo de contraste", "Oclusión de objetos", "Relajación" }));
         comboTerapia.setBorder(null);
         comboTerapia.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {

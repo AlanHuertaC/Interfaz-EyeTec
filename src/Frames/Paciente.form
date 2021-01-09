@@ -188,7 +188,7 @@
                 <StringItem index="0" value="Seleccione la terapia"/>
                 <StringItem index="1" value="Calentamiento"/>
                 <StringItem index="2" value="Manejo de contraste"/>
-                <StringItem index="3" value="Ocluci&#xf3;n de objetos"/>
+                <StringItem index="3" value="Oclusi&#xf3;n de objetos"/>
                 <StringItem index="4" value="Relajaci&#xf3;n"/>
               </StringArray>
             </Property>
