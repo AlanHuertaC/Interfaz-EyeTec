@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Alan Huerta Cortes
  */
 public class Tratamiento {
-    private int idTratamiento;
+
     private String tipoTratamiento;
     private String puntuacion;
     private String duracion;
@@ -31,21 +31,13 @@ public class Tratamiento {
         this.fecha = fecha;
     }
 
-    public Tratamiento(int idTratamiento, String tipoTratamiento, String puntuacion, String duracion, Date fecha, String nivelMejora) {
-        this.idTratamiento = idTratamiento;
+    public Tratamiento(String tipoTratamiento, String puntuacion, String duracion, Date fecha, String nivelMejora) {
+
         this.tipoTratamiento = tipoTratamiento;
         this.puntuacion = puntuacion;
         this.duracion = duracion;
         this.fecha = fecha;
         this.nivelMejora = nivelMejora;
-    }
-
-    public int getIdTratamiento() {
-        return idTratamiento;
-    }
-
-    public void setIdTratamiento(int idTratamiento) {
-        this.idTratamiento = idTratamiento;
     }
 
     public String getTipoTratamiento() {

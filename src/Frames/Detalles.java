@@ -7,7 +7,6 @@ package Frames;
 
 import DAO.Diagnostico;
 import DAO.Especialista;
-import DAO.Ojo;
 import DAO.Prediagnostico;
 import DAO.Tratamiento;
 import java.awt.Dimension;
@@ -27,16 +26,14 @@ public class Detalles extends javax.swing.JFrame {
     Especialista especialistaUnico;
     DAO.Paciente paciente;
     ArrayList<Diagnostico> diagnostico;
-    ArrayList<Ojo> ojo;
     ArrayList<Prediagnostico> prediagnostico;
     ArrayList<Tratamiento> tratamiento;
     ArrayList<Especialista> especialista;
    
-    public Detalles(Especialista especialistaUnico,DAO.Paciente paciente, ArrayList<Especialista> especialista,ArrayList<Ojo> ojo ,  ArrayList<Diagnostico> diagnostico, ArrayList<Tratamiento> tratamiento, ArrayList<Prediagnostico> prediagnostico){
+    public Detalles(Especialista especialistaUnico,DAO.Paciente paciente, ArrayList<Especialista> especialista, ArrayList<Diagnostico> diagnostico, ArrayList<Tratamiento> tratamiento, ArrayList<Prediagnostico> prediagnostico){
         this.especialistaUnico = especialistaUnico;
         this.paciente = paciente;
         this.especialista = especialista;
-        this.ojo = ojo;
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
         this.prediagnostico = prediagnostico;
@@ -68,9 +65,9 @@ public class Detalles extends javax.swing.JFrame {
                 textAreaPre[i] = new JTextArea();
                 textAreaPre[i].setEditable(false);
                 textAreaPre[i].setText("Tipo de estrabismo: " + this.diagnostico.get(i).getTipoEstrabismo() + "\n" +"\n" +
-                                        "Desviación del Ojo Derecho: "+ this.ojo.get(i).getDesviacionDerecha() + " º" +"\n"+ "\n"+
-                                        "Desviación del Ojo Izquierdo: "+ this.ojo.get(i).getDesviacionIzquierda() + " º" + "\n"+ "\n" +
-                                        "Dioptrías prismáticas: "+ this.ojo.get(i).getDioptriasPrismaticas() + "\n"+"\n"+
+                                        "Desviación del Ojo Derecho: "+ this.prediagnostico.get(i).getDesviacionDerecha() + " º" +"\n"+ "\n"+
+                                        "Desviación del Ojo Izquierdo: "+ this.prediagnostico.get(i).getCaracteristicasIzquierda() + " º" + "\n"+ "\n" +
+                                        "Dioptrías prismáticas: "+ this.prediagnostico.get(i).getDioptriasPrismaticas() + "\n"+"\n"+
                                         "Fecha de Realización: "+ this.prediagnostico.get(i).getFecha() + "\n");
 
                 jScrollPanePre[i].setViewportView(textAreaPre[i]);
@@ -269,11 +266,10 @@ public class Detalles extends javax.swing.JFrame {
                 Especialista especialistaU = new Especialista();
                 DAO.Paciente paciente = new DAO.Paciente();
                 ArrayList<Especialista> especialista = new ArrayList<Especialista>();
-                ArrayList<Ojo> ojo = new ArrayList<Ojo>();
                 ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
                 ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
                 ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
-                new Detalles(especialistaU,paciente,especialista,ojo,diagnostico,tratamiento,prediagnostico).setVisible(true);
+                new Detalles(especialistaU,paciente,especialista,diagnostico,tratamiento,prediagnostico).setVisible(true);
             }
         });
     }

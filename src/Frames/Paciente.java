@@ -11,7 +11,6 @@ import Clases.RunApps;
 import Clases.Unity;
 import DAO.Diagnostico;
 import DAO.Especialista;
-import DAO.Ojo;
 import DAO.Prediagnostico;
 import DAO.Tratamiento;
 import java.awt.Color;
@@ -196,12 +195,10 @@ public class Paciente extends javax.swing.JFrame {
         con = cone.getConexion(); //trae la conexion
         /*Datos del prediagnostico*/          
         ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
-        ArrayList<Ojo> ojo = new ArrayList<Ojo>();
         ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
         ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
         
         ArrayList<Especialista> especialista = new ArrayList<Especialista>();
-        //ArrayList<DAO.Paciente> paciente = new ArrayList<DAO.Paciente>();
 
         /**/
         boolean flag = false;
@@ -216,23 +213,14 @@ public class Paciente extends javax.swing.JFrame {
                 diagnostico.add(new Diagnostico(rs.getString("tipo_estrabismo")));
                 especialista.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
                 
-                //System.out.println("F: " + diagnostico.get(0).getTipoEstrabismo());
                 index ++;
             }
-            ps = con.prepareStatement("SELECT DISTINCT o.desviacion_der, o.desviacion_izq, o.dioptrias_prismaticas FROM ojo o WHERE o.Paciente_idPaciente =?  ");
-            ps.setInt(1, this.paciente.getIdPaciente()); 
-            rs = ps.executeQuery();
-            index = 0;
-            while(rs.next()){      
-                ojo.add(new Ojo(rs.getFloat("desviacion_der"), rs.getFloat("desviacion_izq"), rs.getFloat("dioptrias_prismaticas")));
-                index ++;
-            }
-            ps = con.prepareStatement("SELECT DISTINCT pre.fecha FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
+            ps = con.prepareStatement("SELECT DISTINCT pre.fecha, pre.desviacion_der, pre.desviacion_izq, pre.dioptrias_prismaticas FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
             ps.setInt(1, this.paciente.getIdPaciente()); 
             rs = ps.executeQuery();
             index = 0;
             while(rs.next()){
-                prediagnostico.add(new Prediagnostico(rs.getDate("fecha")));
+                prediagnostico.add(new Prediagnostico(rs.getDate("fecha"),rs.getFloat("desviacion_der"),rs.getFloat("desviacion_izq"),rs.getFloat("dioptrias_prismaticas")));
                 index ++;
             }           
         }catch(Exception e){
@@ -260,7 +248,7 @@ public class Paciente extends javax.swing.JFrame {
             System.err.println("Error en tratamiento detalles" + e);
         }
         if(flag){
-            Detalles detalles = new Detalles(this.especialista,paciente,especialista,ojo,diagnostico,tratamiento,prediagnostico);
+            Detalles detalles = new Detalles(this.especialista,paciente,especialista,diagnostico,tratamiento,prediagnostico);
             detalles.setVisible(true);
             dispose();
         }
