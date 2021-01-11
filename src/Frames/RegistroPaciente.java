@@ -13,8 +13,11 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -129,13 +132,23 @@ public class RegistroPaciente extends javax.swing.JFrame {
     }
     
     private void llenarModificacion(){
+        
+    String fechaNacimiento = paciente.getFechaNacimiento();
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd");
 
+    java.util.Date date = new java.util.Date();
+        try {
+            date = formatter.parse(fechaNacimiento);
+        } catch (ParseException ex) {
+            Logger.getLogger(RegistroPaciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         existePaciente(paciente.getNombre(), paciente.getApellidoPaterno(), paciente.getApellidoMaterno());
         textNombre.setText(paciente.getNombre());
         textApPaterno.setText(paciente.getApellidoPaterno());
         textApMaterno.setText(paciente.getApellidoMaterno());
         textEmail.setText(paciente.getEmail());
-        //dateChooserNacimiento.setDate(date);
+        dateChooserNacimiento.setDate(date);
         comboSexo.setSelectedItem(paciente.getSexo());
         
     }
