@@ -46,7 +46,7 @@ public class ModificarNombre extends javax.swing.JFrame {
             System.out.println("el id es: " + paciente.getIdPaciente());
             int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
             if(res > 0){
-                JOptionPane.showMessageDialog(null,"Se modifico correctamente los datos del paciente");
+                JOptionPane.showMessageDialog(null,"Se modificó correctamente los datos del paciente");
 
             }else{
                 JOptionPane.showMessageDialog(null,"No se pudieron modifiar los datos del paciente");

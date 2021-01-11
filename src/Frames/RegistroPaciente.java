@@ -46,6 +46,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
     public RegistroPaciente(Especialista especialista,DAO.Paciente paciente, String tipoConsulta){
         this.especialista = especialista;
         this.paciente = paciente;
+        this.tipoConsulta = tipoConsulta;
         initComponents();
         setTitle("Registro pacientes");
         setResizable(false);

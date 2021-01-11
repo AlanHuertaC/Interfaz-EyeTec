@@ -92,6 +92,9 @@ public class Paciente extends javax.swing.JFrame {
             
             if(rs.next()){ // para verificar si trae los datos de la consulta
               textNombre.setText(rs.getString("nombre") + " " + rs.getString("ap_paterno") + " " + rs.getString("ap_materno"));
+              paciente.setNombre(rs.getString("nombre"));
+              paciente.setApellidoPaterno(rs.getString("ap_paterno"));
+              paciente.setApellidoMaterno(rs.getString("ap_materno"));
             }else{
               
             }
