@@ -22,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
+
 /**
  *
  * @author Alan Huerta Cortes
@@ -34,7 +35,11 @@ public class Paciente extends javax.swing.JFrame {
     
     Especialista especialista;
     DAO.Paciente paciente;
-     
+    
+    public Paciente(){
+        
+    }
+    
     public Paciente(Especialista especialista, DAO.Paciente paciente) {
         initComponents();
         this.especialista = especialista;
@@ -47,6 +52,8 @@ public class Paciente extends javax.swing.JFrame {
         spinnerMinutos.setVisible(false);
         comboTerapia.getModel();
         selecccionarPaciente();
+        setTitle("Paciente");
+        setResizable(false);   
         
     }
    
@@ -285,6 +292,11 @@ public class Paciente extends javax.swing.JFrame {
             comboTerapia.setBorder(redline);
         }
     }
+    
+    public void modificarNombre(DAO.Paciente paciente){
+        ModificarNombre modificar = new ModificarNombre(paciente);
+        modificar.setVisible(true);        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -306,7 +318,7 @@ public class Paciente extends javax.swing.JFrame {
         comboTerapia = new javax.swing.JComboBox<>();
         spinnerMinutos = new javax.swing.JSpinner();
         textSeleccion = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        labelModificar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -359,7 +371,12 @@ public class Paciente extends javax.swing.JFrame {
 
         textSeleccion.setText("Seleccione los minutos");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/modificar2.jpg"))); // NOI18N
+        labelModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/modificar2.jpg"))); // NOI18N
+        labelModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelModificarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -390,7 +407,7 @@ public class Paciente extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(textNombre)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)))
+                                .addComponent(labelModificar)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -402,7 +419,7 @@ public class Paciente extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
+                            .addComponent(labelModificar)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel1)
                                 .addComponent(textNombre)))))
@@ -459,6 +476,10 @@ public class Paciente extends javax.swing.JFrame {
         seleccionarTerapia();
     }//GEN-LAST:event_comboTerapiaItemStateChanged
 
+    private void labelModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelModificarMouseClicked
+        modificarNombre(paciente);
+    }//GEN-LAST:event_labelModificarMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -504,8 +525,8 @@ public class Paciente extends javax.swing.JFrame {
     private javax.swing.JButton btnTerapia;
     private javax.swing.JComboBox<String> comboTerapia;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel labelModificar;
     private javax.swing.JSpinner spinnerMinutos;
     private javax.swing.JLabel textIsDiagnostic;
     private javax.swing.JLabel textNombre;

@@ -81,6 +81,14 @@ public class Persona {
     public void setEdad(int edad) {
         this.edad = edad;
     }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
     
     
 }

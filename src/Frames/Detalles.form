@@ -146,6 +146,9 @@
               <Image iconType="3" name="/Images/modificar2.jpg"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="labelModificarMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

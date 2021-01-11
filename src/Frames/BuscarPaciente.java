@@ -37,11 +37,14 @@ public class BuscarPaciente extends javax.swing.JFrame {
     
     public BuscarPaciente(Especialista especialista) {
         initComponents();
+        setTitle("Buscar paciente");
+        setResizable(false);  
         con = cone.getConexion(); //trae la conexion
         this.especialista = especialista;
         textNombre.setText(this.especialista.getNombre() + " " + especialista.getApellidoPaterno() + " " + especialista.getApellidoMaterno());
         llenarTablaInicio();
         seleccionFilas();
+        
     }
         
     public void llenarTablaInicio(){
@@ -162,7 +165,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
     }
     
     private void seleccionarPaciente(){
-         Paciente paciente = new Paciente(this.especialista, this.paciente);
+        Paciente paciente = new Paciente(this.especialista, this.paciente);
         paciente.setVisible(true);
         dispose();
         //System.out.println("El id es " + Login.idEspecialista);
@@ -216,7 +219,14 @@ public class BuscarPaciente extends javax.swing.JFrame {
     }
     
     private void registrarPaciente(){
-        RegistroPaciente registroPaciente = new RegistroPaciente(especialista);
+        RegistroPaciente registroPaciente = new RegistroPaciente(especialista, "Guardar registro");
+        registroPaciente.setVisible(true);
+        dispose();
+    }
+    
+    private void modificarPaciente(){
+        
+        RegistroPaciente registroPaciente = new RegistroPaciente(especialista,this.paciente, "Modificar registro");
         registroPaciente.setVisible(true);
         dispose();
     }
@@ -231,10 +241,9 @@ public class BuscarPaciente extends javax.swing.JFrame {
                     /*Eliminar paciente*/
                     //System.out.println(datosPaciente[1]+ " " + datosPaciente[2] + " " + datosPaciente[3] );
                     try{
-                        ps = con.prepareStatement("DELETE FROM Paciente WHERE nombre=? AND ap_paterno=? AND ap_materno=?");
-                        ps.setString(1, this.paciente.getNombre());
-                        ps.setString(2, this.paciente.getApellidoPaterno());
-                        ps.setString(3, this.paciente.getApellidoMaterno());
+                        ps = con.prepareStatement("DELETE FROM Paciente WHERE idPaciente=? ");
+                        ps.setInt(1, this.paciente.getIdPaciente());
+                      
                         int res = ps.executeUpdate();
 
                         if(res > 0){
@@ -348,6 +357,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
     }   
     
     private void seleccionarPacienteTabla(){
+
         String datosPaciente[] = new String[Tamano];
         for(int i=0; i<Tamano; i++){
             datosPaciente[i] = tablaPacientes.getModel().getValueAt(indiceFilaSeleccionada, i).toString();
@@ -363,6 +373,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
         tablaPacientes.setModel(dtm);
         
         this.paciente = new DAO.Paciente(Integer.parseInt(datosPaciente[0]),datosPaciente[1],datosPaciente[2],datosPaciente[3],datosPaciente[4],datosPaciente[5],datosPaciente[6]);
+    
     }
 
     /**
@@ -396,7 +407,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
         textNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         textNombre.setText("Nombre");
 
-        jLabel3.setText("Busqueda de pacientes:");
+        jLabel3.setText("Búsqueda de pacientes:");
 
         tablaPacientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -441,6 +452,11 @@ public class BuscarPaciente extends javax.swing.JFrame {
         });
 
         btnModificar.setText("Modificar Paciente");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -484,9 +500,9 @@ public class BuscarPaciente extends javax.swing.JFrame {
                     .addComponent(btnRegistrar)
                     .addComponent(btnEliminar)
                     .addComponent(btnModificar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(4, 4, 4))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -523,6 +539,10 @@ public class BuscarPaciente extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         elminarPaciente();
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        modificarPaciente();
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
      * @param args the command line arguments

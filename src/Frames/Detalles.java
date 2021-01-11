@@ -42,6 +42,7 @@ public class Detalles extends javax.swing.JFrame {
         detallesPrediagnostico();
         /*Tratamiento*/
         detallesTratamiento();
+        setTitle("Detalles");
     }
        
     private void detallesPrediagnostico(){
@@ -183,6 +184,11 @@ public class Detalles extends javax.swing.JFrame {
         labelName.setText("Nombre");
 
         labelModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/modificar2.jpg"))); // NOI18N
+        labelModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelModificarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,6 +246,11 @@ public class Detalles extends javax.swing.JFrame {
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         volverPaciente();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void labelModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelModificarMouseClicked
+       Paciente paciente = new Paciente();
+       paciente.modificarNombre(this.paciente);
+    }//GEN-LAST:event_labelModificarMouseClicked
 
     /**
      * @param args the command line arguments
