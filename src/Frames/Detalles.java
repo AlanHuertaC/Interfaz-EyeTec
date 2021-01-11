@@ -43,6 +43,7 @@ public class Detalles extends javax.swing.JFrame {
         /*Tratamiento*/
         detallesTratamiento();
         setTitle("Detalles");
+        labelModificar.setVisible(false);
     }
        
     private void detallesPrediagnostico(){

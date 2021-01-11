@@ -44,20 +44,19 @@ public class Paciente extends javax.swing.JFrame {
         initComponents();
         this.especialista = especialista;
         this.paciente = paciente;
-        textNombre.setText(this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
+        //textNombre.setText(this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
         btnTerapia.setVisible(false);
         btnDetails.setVisible(false);
         comboTerapia.setVisible(false);        
         textSeleccion.setVisible(false);
         spinnerMinutos.setVisible(false);
         comboTerapia.getModel();
-        selecccionarPaciente();
+        validarPrediagnostico();
         setTitle("Paciente");
-        setResizable(false);   
-        
+        setResizable(false);           
     }
    
-    private void selecccionarPaciente(){
+    private void validarPrediagnostico(){
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
         try{
@@ -79,7 +78,27 @@ public class Paciente extends javax.swing.JFrame {
             ps.close();
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-        }
+        }        
+    }
+    
+    private void seleccionarPaciente(){
+        Connection con = null;
+        con = cone.getConexion(); //trae la conexion
+        try{
+            ps = con.prepareStatement("SELECT * FROM paciente where idPaciente = ?");
+            ps.setInt(1, this.paciente.getIdPaciente());
+  
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+            
+            if(rs.next()){ // para verificar si trae los datos de la consulta
+              textNombre.setText(rs.getString("nombre") + " " + rs.getString("ap_paterno") + " " + rs.getString("ap_materno"));
+            }else{
+              
+            }
+            ps.close();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
+        }        
     }
     
     public void insertTiempoApi(int tiempo){
@@ -321,6 +340,13 @@ public class Paciente extends javax.swing.JFrame {
         labelModificar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Paciente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 51, 255))); // NOI18N
@@ -479,6 +505,11 @@ public class Paciente extends javax.swing.JFrame {
     private void labelModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelModificarMouseClicked
         modificarNombre(paciente);
     }//GEN-LAST:event_labelModificarMouseClicked
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        validarPrediagnostico();
+        seleccionarPaciente();
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**
      * @param args the command line arguments
