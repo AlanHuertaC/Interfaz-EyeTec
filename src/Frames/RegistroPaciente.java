@@ -62,7 +62,6 @@ public class RegistroPaciente extends javax.swing.JFrame {
         validaciones = new Validaciones();      
         btnGuardar.setText(tipoConsulta);
         
-        
     }
     
     public boolean existePaciente(String nombre, String Paterno, String Materno){

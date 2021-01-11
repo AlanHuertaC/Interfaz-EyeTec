@@ -116,10 +116,10 @@ public class Paciente extends javax.swing.JFrame {
             if(rs.next()){ // para verificar si trae los datos de la consulta
             int confirmacion = JOptionPane.showConfirmDialog(null, "Este paciente ya se ha realizado un prediagnostico, ¿Desea realizar otro?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             
-                if(confirmacion==0){
-                    /*Abrir Unity*/
-                    unity.OpenUnity();
-                }            
+            if(confirmacion==0){
+                /*Abrir Unity*/
+                unity.OpenUnity();
+            }            
             }else{
                 /*Abrir Unity*/
                 unity.OpenUnity();
