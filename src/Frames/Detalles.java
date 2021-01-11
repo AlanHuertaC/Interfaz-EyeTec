@@ -5,12 +5,16 @@
  */
 package Frames;
 
+import Clases.GenerarPDF;
 import DAO.Diagnostico;
 import DAO.Especialista;
 import DAO.Prediagnostico;
 import DAO.Tratamiento;
 import java.awt.Dimension;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,17 +50,17 @@ public class Detalles extends javax.swing.JFrame {
         labelModificar.setVisible(false);
     }
        
-    private void detallesPrediagnostico(){
+    private JTextArea[] detallesPrediagnostico(){
         /*Nombre del Paciente*/
         labelName.setText( this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
         /*Prediagnostico*/
-       
-        try{
-            JPanel panelPre = new JPanel();        
-            int TamanoPre =  this.prediagnostico.size();
-            JLabel textLabelPre[] = new JLabel[TamanoPre+1];
-            JTextArea textAreaPre[] = new JTextArea[TamanoPre+1];
-            JScrollPane jScrollPanePre[] = new JScrollPane[TamanoPre+1];
+        JPanel panelPre = new JPanel();        
+        int TamanoPre =  this.prediagnostico.size();
+        JLabel textLabelPre[] = new JLabel[TamanoPre+1];
+        JTextArea textAreaPre[] = new JTextArea[TamanoPre+1];
+        JScrollPane jScrollPanePre[] = new JScrollPane[TamanoPre+1];
+        
+        try{            
             
             for(int i=0; i<TamanoPre; i++){
                 jScrollPanePre[i] = new javax.swing.JScrollPane();
@@ -66,11 +70,11 @@ public class Detalles extends javax.swing.JFrame {
 
                 textAreaPre[i] = new JTextArea();
                 textAreaPre[i].setEditable(false);
-                textAreaPre[i].setText("Tipo de estrabismo: " + this.prediagnostico.get(i).getTipoEstrabismo() + "\n" +"\n" +
-                                        "Desviación del Ojo Derecho: "+ this.prediagnostico.get(i).getDesviacionDerecha() + " º" +"\n"+ "\n"+
-                                        "Desviación del Ojo Izquierdo: "+ this.prediagnostico.get(i).getDesviacionIzquierda() + " º" + "\n"+ "\n" +
-                                        "Dioptrías prismáticas: "+ this.prediagnostico.get(i).getDioptriasPrismaticas() + "\n"+"\n"+
-                                        "Fecha de Realización: "+ this.prediagnostico.get(i).getFecha() + "\n");
+                textAreaPre[i].setText(">Tipo de estrabismo: " + this.prediagnostico.get(i).getTipoEstrabismo() + "\n" +
+                                        ">Desviación del Ojo Derecho: "+ this.prediagnostico.get(i).getDesviacionDerecha() + " º" +"\n"+
+                                        ">Desviación del Ojo Izquierdo: "+ this.prediagnostico.get(i).getDesviacionIzquierda() + " º" + "\n" +
+                                        ">Dioptrías prismáticas: "+ this.prediagnostico.get(i).getDioptriasPrismaticas() + "\n"+
+                                        ">Fecha de Realización: "+ this.prediagnostico.get(i).getFecha() + "\n");
                 
                 jScrollPanePre[i].setViewportView(textAreaPre[i]);
                 javax.swing.GroupLayout panelPreLayout = new javax.swing.GroupLayout(panelPre);
@@ -87,6 +91,7 @@ public class Detalles extends javax.swing.JFrame {
         for(int i=0; i<TamanoPre; i++){
             System.err.println(this.prediagnostico.get(i).getTipoEstrabismo());
         }*/
+        return textAreaPre;
         
     }
     
@@ -162,6 +167,7 @@ public class Detalles extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         labelName = new javax.swing.JLabel();
         labelModificar = new javax.swing.JLabel();
+        btnPDF = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -191,6 +197,13 @@ public class Detalles extends javax.swing.JFrame {
             }
         });
 
+        btnPDF.setText("Generar PDF");
+        btnPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDFActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -200,8 +213,13 @@ public class Detalles extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPDF))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -224,8 +242,11 @@ public class Detalles extends javax.swing.JFrame {
                     .addComponent(labelModificar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPDF)))
                 .addContainerGap())
         );
 
@@ -252,6 +273,15 @@ public class Detalles extends javax.swing.JFrame {
        Paciente paciente = new Paciente();
        paciente.modificarNombre(this.paciente);
     }//GEN-LAST:event_labelModificarMouseClicked
+
+    private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
+        GenerarPDF pdf = new GenerarPDF(detallesPrediagnostico());
+        try {
+            pdf.writePDF();
+        } catch (IOException ex) {
+            Logger.getLogger(Detalles.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPDFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,6 +325,7 @@ public class Detalles extends javax.swing.JFrame {
     }
      
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPDF;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
