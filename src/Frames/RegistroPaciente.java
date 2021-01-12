@@ -155,7 +155,32 @@ public class RegistroPaciente extends javax.swing.JFrame {
     }
     
     private void actualizarPaciente(){
-        
+        Connection con = null;
+        con = cone.getConexion(); //trae la conexion
+        Calendar cal = dateChooserNacimiento.getCalendar();
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd"); 
+        String date = sdf.format(cal.getTime());
+        try{
+            ps = con.prepareStatement("UPDATE paciente SET nombre=?, ap_paterno=?, ap_materno=?, sexo=?, fecha_nacimiento=?, email=? WHERE idPaciente=? "); // para insertar valores a mi tabla
+            ps.setString(1, textNombre.getText());
+            ps.setString(2, textApPaterno.getText());
+            ps.setString(3, textApMaterno.getText());
+            ps.setString(4, comboSexo.getSelectedItem().toString());
+            ps.setDate(5,Date.valueOf(date));
+            ps.setString(6,textEmail.getText());
+            
+            ps.setInt(7, paciente.getIdPaciente());
+            System.out.println("el id es: " + paciente.getIdPaciente());
+            int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
+            if(res > 0){
+                JOptionPane.showMessageDialog(null,"Se modificó correctamente los datos del paciente");
+
+            }else{
+                JOptionPane.showMessageDialog(null,"No se pudieron modifiar los datos del paciente");
+            } 
+        }catch(Exception e){
+            System.err.println("Error " + e.getMessage() );
+        }
     }
     
     private void volverBusquedaPaciente(){
@@ -372,9 +397,9 @@ public class RegistroPaciente extends javax.swing.JFrame {
                 if(tipoConsulta.equalsIgnoreCase("Guardar registro")){
                     registroPaciente();
                     JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
-                }else if(tipoConsulta.equalsIgnoreCase("Actualizar registro")){
+                }else if(tipoConsulta.equalsIgnoreCase("Modificar registro")){
                     actualizarPaciente();
-                    JOptionPane.showMessageDialog(null, "Se actualizó el registro de manera exitosa");
+                    //JOptionPane.showMessageDialog(null, "Se actualizó el registro de manera exitosa");
                 }               
             }                
         }

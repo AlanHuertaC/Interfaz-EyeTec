@@ -95,15 +95,15 @@ public class Detalles extends javax.swing.JFrame {
         
     }
     
-    private void detallesTratamiento(){
-        try{
+    private JTextArea[] detallesTratamiento(){
             JPanel panelTra = new JPanel();        
             int TamanoTra = this.tratamiento.size();//Paciente.tipoTratamiento.size();
             
             JLabel textLabelTra[] = new JLabel[TamanoTra+1];
             JTextArea textAreaTra[] = new JTextArea[TamanoTra+1];
             JScrollPane jScrollPaneTra[] = new JScrollPane[TamanoTra+1];
-            
+        try{
+                        
             for(int i=0; i<TamanoTra; i++){
                 jScrollPaneTra[i] = new javax.swing.JScrollPane();
                 textLabelTra[i] = new JLabel();
@@ -128,11 +128,11 @@ public class Detalles extends javax.swing.JFrame {
                 if(this.tratamiento.get(i).getDuracion().substring(0, 2).equalsIgnoreCase("00"))
                     unidadesTiempo = "segundos";
                 
-                textAreaTra[i].setText("Tipo de Tratamiento: " + this.tratamiento.get(i).getTipoTratamiento() + "\n" +"\n" +
-                                        "Nombre de la terapia visual: "+ nombreTerapia + "\n" + "\n"+
-                                        "Puntuación Obtenida: "+ this.tratamiento.get(i).getPuntuacion() + "\n" + "\n"+
-                                        "Duración de la terapia: "+ this.tratamiento.get(i).getDuracion() + " " + unidadesTiempo +"\n"+ "\n"+                                        
-                                        "Fecha de Realización: "+ this.tratamiento.get(i).getFecha() + "\n");
+                textAreaTra[i].setText(">Tipo de Tratamiento: " + this.tratamiento.get(i).getTipoTratamiento() + "\n"  +
+                                        ">Nombre de la terapia visual: "+ nombreTerapia + "\n" +
+                                        ">Puntuación Obtenida: "+ this.tratamiento.get(i).getPuntuacion() + "\n" +
+                                        ">Duración de la terapia: "+ this.tratamiento.get(i).getDuracion() + " " + unidadesTiempo + "\n" +                                        
+                                        ">Fecha de Realización: "+ this.tratamiento.get(i).getFecha() + "\n");
                 
                 jScrollPaneTra[i].setViewportView(textAreaTra[i]);
                 javax.swing.GroupLayout panelPreLayout = new javax.swing.GroupLayout(panelTra);
@@ -144,6 +144,8 @@ public class Detalles extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println("Sin Tratamiento" + e);
         }    
+        
+        return textAreaTra;
     }
     
     private void volverPaciente(){
@@ -275,7 +277,7 @@ public class Detalles extends javax.swing.JFrame {
     }//GEN-LAST:event_labelModificarMouseClicked
 
     private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
-        GenerarPDF pdf = new GenerarPDF(detallesPrediagnostico());
+        GenerarPDF pdf = new GenerarPDF(especialistaUnico, especialista , paciente, detallesPrediagnostico(),detallesTratamiento());
         try {
             pdf.writePDF();
         } catch (IOException ex) {

@@ -232,7 +232,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
     }
     
     private void elminarPaciente(){
-        int option = JOptionPane.showConfirmDialog(null, "¿Desea eliminar este registro de manera permanente?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, "¿Desea eliminar este registro de manera permanente?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if(option == 0){
             try{
                 if(textSearch.getText().isEmpty()){
@@ -285,7 +285,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
             for (int i =1 ; i <= columna; i++) {
                 modelo.addColumn(rsMeta.getColumnLabel(i));
             }
-            modelo.addColumn("Prediagnostico");
+            modelo.addColumn("Prediagnóstico");
             modelo.addColumn("Tratamiento");
             modelo.addColumn("Especialista");
             String filas[] = new String[columna+3];
@@ -377,7 +377,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
     }
     
     private void cerrarSesion(){
-        int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             
         if(confirmacion==0){
            Login login = new Login();

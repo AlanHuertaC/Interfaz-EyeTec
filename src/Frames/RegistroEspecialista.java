@@ -109,7 +109,7 @@ public class RegistroEspecialista extends javax.swing.JFrame {
             
             if(res > 0){
                System.out.println("Se agrego correctamente el registro Especialista");
-               JOptionPane.showMessageDialog(null, "Se agrego correctamente su registro");
+               JOptionPane.showMessageDialog(null, "Se agregó correctamente su registro");
                Login login = new Login();
                login.setVisible(true);
                dispose();

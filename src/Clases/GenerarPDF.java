@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Clases;
+import DAO.Especialista;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -33,10 +34,18 @@ import javax.swing.JTextArea;
  */
 public class GenerarPDF {
     
+    Especialista especialista;
+    ArrayList<Especialista> especialistas;
+    DAO.Paciente paciente;
     JTextArea prediagnostico[];
+    JTextArea tratamiento[];
 
-    public GenerarPDF(JTextArea prediagnostico[]) {
+    public GenerarPDF(Especialista especialista,  ArrayList<Especialista> especialistas, DAO.Paciente paciente,JTextArea prediagnostico[], JTextArea tratamiento[]) {
+        this.especialista = especialista;
+        this.especialistas = especialistas;
+        this.paciente = paciente;
         this.prediagnostico = prediagnostico;
+        this.tratamiento = tratamiento;
     }
     
     /*public static void main(String[] args) 
@@ -65,16 +74,16 @@ public class GenerarPDF {
             document.add(foto);
  
            
-            /**/
+            /*Establecer fecha*/
             SimpleDateFormat formateador = new SimpleDateFormat("dd 'de' 'enero' 'de' yyyy", new Locale("es_ES"));
             Date fechaDate = new Date();
             String fecha = formateador.format(fechaDate);
-            /**/
+            /*Fecha*/
             
             Font fontFecha = new Font();
             //fontFecha.setFamily(FontFamily.COURIER.name());
             fontFecha.setStyle(Font.BOLDITALIC);
-            fontFecha.setSize(8);
+            fontFecha.setSize(10);
             Paragraph paragraphFecha = new Paragraph();
             paragraphFecha.setFont(fontFecha);
             paragraphFecha.add("Toluca, México a " + fecha + "\n\n\n\n");
@@ -106,14 +115,36 @@ public class GenerarPDF {
  
             document.add(paragraphLorem);
             document.add(p3);*/
-            Font fontDoctor = new Font();
-            //fontFecha.setFamily(FontFamily.COURIER.name());
-            fontDoctor.setStyle(Font.NORMAL);
+            /*Doctor*/
+            Font fontDoctor = new Font();            
+            fontDoctor.setStyle(Font.ITALIC);
             fontDoctor.setSize(12);
             Paragraph paragraphDoctor = new Paragraph();
             paragraphDoctor.setFont(fontDoctor);
-            paragraphDoctor.add("Dr. " + "\n\n");
+            paragraphDoctor.add("Dr. " + especialista.getNombre() + " " + especialista.getApellidoPaterno() + " " + especialista.getApellidoMaterno() + "\n\n");
             document.add(paragraphDoctor);
+            
+            /*Texto Paciente*/
+            Font fontTituloPaciente = new Font();            
+            fontTituloPaciente.setStyle(Font.UNDERLINE);
+            fontTituloPaciente.setSize(14);
+            Paragraph paragraphTituloPaciente = new Paragraph();
+            paragraphTituloPaciente.setFont(fontTituloPaciente);
+            paragraphTituloPaciente.setAlignment(Element.ALIGN_CENTER);
+            paragraphTituloPaciente.add("DATOS DEL PACIENTE \n\n");
+            document.add(paragraphTituloPaciente);
+            
+            /*Datos del paciente*/
+            Font fontDatosPaciente = new Font();            
+            fontDatosPaciente.setStyle(Font.NORMAL);
+            fontDatosPaciente.setSize(12);
+            Paragraph paragraphDatosPaciente = new Paragraph();
+            paragraphDatosPaciente.setFont(fontDatosPaciente);            
+            paragraphDatosPaciente.add("Nombre completo: " + paciente.getNombre() + " " + paciente.getApellidoPaterno() + " " + paciente.getApellidoMaterno() +"\n"+
+                                       "Sexo: " + paciente.getSexo() + "\n" +
+                                       "Fecha de nacimiento: " + paciente.getFechaNacimiento() + "\n\n");
+            document.add(paragraphDatosPaciente);
+            
             
             /*Prediagnostico*/
             Font fontTitulo = new Font();
@@ -126,19 +157,47 @@ public class GenerarPDF {
             paragraphTitulo.setAlignment(Element.ALIGN_LEFT);
             document.add(paragraphTitulo);
             
-            Font fontDatos = new Font();
-            //fontFecha.setFamily(FontFamily.COURIER.name());
+            /*Datos prediagnostico*/
+            Font fontDatos = new Font();            
             fontDatos.setStyle(Font.NORMAL);
-            fontDatos.setSize(10);
+            fontDatos.setSize(12);
             Paragraph paragraphDatos = new Paragraph();
             paragraphDatos.setFont(fontDatos);
             int TamanoPre = this.prediagnostico.length - 1;
             
+            /*Lineas naranjas*/
+            Image orangelines = Image.getInstance(System.getProperty("user.dir") + "/Orange-lines.png");
+            orangelines.scaleToFit(300, 40);
+            orangelines.setAlignment(Chunk.ALIGN_MIDDLE);
+            
+            /*Quien atendió*/
+            Paragraph paragraphEspecialistas = new Paragraph();
+            Font fontEspecialiastas = new Font();            
+            fontEspecialiastas.setStyle(Font.BOLD);
+            fontEspecialiastas.setSize(12);
+            paragraphEspecialistas.setFont(fontEspecialiastas);
+            
             for(int i=0; i<TamanoPre; i++){
-                paragraphDatos.add(this.prediagnostico[i].getText());
-                document.add(paragraphDatos);                
+                if(i!= 0)
+                    document.add(orangelines);
+                paragraphEspecialistas.add("Atendido por: " + this.especialistas.get(i).getNombre() + " " + this.especialistas.get(i).getApellidoPaterno() + " " + this.especialistas.get(i).getApellidoMaterno() + "\n");
+                document.add(paragraphEspecialistas);
+                paragraphEspecialistas = null;
+                paragraphEspecialistas = new Paragraph();
+                paragraphEspecialistas.setFont(fontEspecialiastas);
+                
+                paragraphDatos.add(this.prediagnostico[i].getText() + "\n");
+                document.add(paragraphDatos);   
+                paragraphDatos = null;
+                paragraphDatos = new Paragraph();
+                paragraphDatos.setFont(fontDatos);                
             }
            
+            /*Separador azul*/
+            Image bluelines = Image.getInstance(System.getProperty("user.dir") + "/Blue-lines.png");
+            bluelines.scaleToFit(500, 40);
+            bluelines.setAlignment(Chunk.ALIGN_MIDDLE);
+            document.add(bluelines);
             
             /*Tratamiento*/            
             
@@ -148,9 +207,47 @@ public class GenerarPDF {
             fontTitulo2.setSize(12);
             Paragraph paragraphTitulo2 = new Paragraph();
             paragraphTitulo2.setFont(fontTitulo);
-            paragraphTitulo2.add("\n\nResultados del tratamiento" + "\n\n\n\n");
+            paragraphTitulo2.add("\n\nResultados del tratamiento" + "\n\n");
             document.add(paragraphTitulo2);
             
+            
+            /*T*/          
+            
+            /*Datos tratamiento*/
+            Font fontDatosT = new Font();            
+            fontDatosT.setStyle(Font.NORMAL);
+            fontDatosT.setSize(12);
+            Paragraph paragraphDatosT = new Paragraph();
+            paragraphDatosT.setFont(fontDatosT);
+            int TamanoTra = this.tratamiento.length -1;
+            
+            /*Lineas naranjas*/
+            /*Image orangelines = Image.getInstance(System.getProperty("user.dir") + "/Orange-lines.png");
+            orangelines.scaleToFit(300, 40);
+            orangelines.setAlignment(Chunk.ALIGN_MIDDLE);*/
+            
+            /*Quien atendió*/
+            Paragraph paragraphEspecialistasT = new Paragraph();
+            Font fontEspecialiastasT = new Font();            
+            fontEspecialiastasT.setStyle(Font.BOLD);
+            fontEspecialiastasT.setSize(12);
+            paragraphEspecialistasT.setFont(fontEspecialiastasT);
+            
+            for(int i=0; i<TamanoTra; i++){
+                if(i!= 0)
+                    document.add(orangelines);
+                paragraphEspecialistasT.add("Atendido por: " + this.especialistas.get(i).getNombre() + " " + this.especialistas.get(i).getApellidoPaterno() + " " + this.especialistas.get(i).getApellidoMaterno() + "\n");
+                document.add(paragraphEspecialistasT);
+                paragraphEspecialistasT = null;
+                paragraphEspecialistasT = new Paragraph();
+                paragraphEspecialistasT.setFont(fontEspecialiastasT);
+                
+                paragraphDatosT.add(this.tratamiento[i].getText() + "\n");
+                document.add(paragraphDatosT);   
+                paragraphDatosT = null;
+                paragraphDatosT = new Paragraph();
+                paragraphDatosT.setFont(fontDatos);                
+            }
             
            
             
