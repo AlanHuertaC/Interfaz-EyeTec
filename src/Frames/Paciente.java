@@ -227,7 +227,9 @@ public class Paciente extends javax.swing.JFrame {
         ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
         ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
         
-        ArrayList<Especialista> especialista = new ArrayList<Especialista>();
+        ArrayList<Especialista> especialistaPrediagnostico = new ArrayList<Especialista>();
+        ArrayList<Especialista> especialistaTratamiento = new ArrayList<Especialista>();
+        
 
         /**/
         boolean flag = false;
@@ -239,7 +241,7 @@ public class Paciente extends javax.swing.JFrame {
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             int index = 0;
             while(rs.next()){ // para verificar si trae los datos de la consulta  
-                especialista.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
+                especialistaPrediagnostico.add(new Especialista(rs.getString("nombre"),rs.getString("ap_paterno"),rs.getString("ap_materno")));
                 index ++;
             }
             ps = con.prepareStatement("SELECT DISTINCT pre.fecha, tipo_estrabismo, pre.desviacion_der, pre.desviacion_izq, pre.dioptrias_prismaticas FROM prediagnostico pre WHERE pre.Paciente_idPaciente = ?");
@@ -267,7 +269,7 @@ public class Paciente extends javax.swing.JFrame {
             int index = 0;
             while(rs.next()){ // para verificar si trae los datos de la consulta 
                 tratamiento.add(new Tratamiento(rs.getString("TipoDeTratamiento"), rs.getString("puntuacion"), rs.getString("duraciontotal"), rs.getDate("fecha")));
-                especialista.add(new Especialista(rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno")));
+                especialistaTratamiento.add(new Especialista(rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno")));
                 index ++;
             } 
             flag = true;
@@ -276,7 +278,7 @@ public class Paciente extends javax.swing.JFrame {
             System.err.println("Error en tratamiento detalles" + e);
         }
         if(flag){
-            Detalles detalles = new Detalles(this.especialista,paciente,especialista,diagnostico,tratamiento,prediagnostico);
+            Detalles detalles = new Detalles(this.especialista,paciente,especialistaPrediagnostico,especialistaTratamiento,diagnostico,tratamiento,prediagnostico);
             detalles.setVisible(true);
             dispose();
         }

@@ -32,12 +32,14 @@ public class Detalles extends javax.swing.JFrame {
     ArrayList<Diagnostico> diagnostico;
     ArrayList<Prediagnostico> prediagnostico;
     ArrayList<Tratamiento> tratamiento;
-    ArrayList<Especialista> especialista;
+    ArrayList<Especialista> especialistaPrediagnostico;
+    ArrayList<Especialista> especialistaTratamiento;
    
-    public Detalles(Especialista especialistaUnico,DAO.Paciente paciente, ArrayList<Especialista> especialista, ArrayList<Diagnostico> diagnostico, ArrayList<Tratamiento> tratamiento, ArrayList<Prediagnostico> prediagnostico){
+    public Detalles(Especialista especialistaUnico,DAO.Paciente paciente, ArrayList<Especialista> especialistaPrediagnostico,ArrayList<Especialista> especialistaTratamiento,ArrayList<Diagnostico> diagnostico, ArrayList<Tratamiento> tratamiento, ArrayList<Prediagnostico> prediagnostico){
         this.especialistaUnico = especialistaUnico;
         this.paciente = paciente;
-        this.especialista = especialista;
+        this.especialistaPrediagnostico = especialistaPrediagnostico;
+        this.especialistaTratamiento = especialistaTratamiento;
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
         this.prediagnostico = prediagnostico;
@@ -65,7 +67,7 @@ public class Detalles extends javax.swing.JFrame {
             for(int i=0; i<TamanoPre; i++){
                 jScrollPanePre[i] = new javax.swing.JScrollPane();
                 textLabelPre[i] = new JLabel();
-                textLabelPre[i].setText("Atendido por: " + this.especialista.get(i).getNombre() + " " + this.especialista.get(i).getApellidoPaterno() + " " + this.especialista.get(i).getApellidoMaterno());
+                textLabelPre[i].setText("Atendido por: " + this.especialistaPrediagnostico.get(i).getNombre() + " " + this.especialistaPrediagnostico.get(i).getApellidoPaterno() + " " + this.especialistaPrediagnostico.get(i).getApellidoMaterno());
                 textLabelPre[i].setPreferredSize(new Dimension(25, 25));
 
                 textAreaPre[i] = new JTextArea();
@@ -107,7 +109,7 @@ public class Detalles extends javax.swing.JFrame {
             for(int i=0; i<TamanoTra; i++){
                 jScrollPaneTra[i] = new javax.swing.JScrollPane();
                 textLabelTra[i] = new JLabel();
-                textLabelTra[i].setText("Atendido por: " + this.especialista.get(i).getNombre() + " " + this.especialista.get(i).getApellidoPaterno() + " " + this.especialista.get(i).getApellidoMaterno());
+                textLabelTra[i].setText("Atendido por: " + this.especialistaTratamiento.get(i).getNombre() + " " + this.especialistaTratamiento.get(i).getApellidoPaterno() + " " + this.especialistaTratamiento.get(i).getApellidoMaterno());
                 textLabelTra[i].setPreferredSize(new Dimension(25, 25));
                 
                 textAreaTra[i] = new JTextArea();
@@ -277,7 +279,7 @@ public class Detalles extends javax.swing.JFrame {
     }//GEN-LAST:event_labelModificarMouseClicked
 
     private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
-        GenerarPDF pdf = new GenerarPDF(especialistaUnico, especialista , paciente, detallesPrediagnostico(),detallesTratamiento());
+        GenerarPDF pdf = new GenerarPDF(especialistaUnico, especialistaPrediagnostico, especialistaTratamiento, paciente, detallesPrediagnostico(),detallesTratamiento());
         try {
             pdf.writePDF();
         } catch (IOException ex) {
@@ -318,10 +320,11 @@ public class Detalles extends javax.swing.JFrame {
                 Especialista especialistaU = new Especialista();
                 DAO.Paciente paciente = new DAO.Paciente();
                 ArrayList<Especialista> especialista = new ArrayList<Especialista>();
+                ArrayList<Especialista> especialista2 = new ArrayList<Especialista>();
                 ArrayList<Diagnostico> diagnostico = new ArrayList<Diagnostico>();
                 ArrayList<Tratamiento> tratamiento = new ArrayList<Tratamiento>();
                 ArrayList<Prediagnostico> prediagnostico = new ArrayList<Prediagnostico>();
-                new Detalles(especialistaU,paciente,especialista,diagnostico,tratamiento,prediagnostico).setVisible(true);
+                new Detalles(especialistaU,paciente,especialista,especialista2,diagnostico,tratamiento,prediagnostico).setVisible(true);
             }
         });
     }

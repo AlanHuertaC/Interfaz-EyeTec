@@ -35,27 +35,20 @@ import javax.swing.JTextArea;
 public class GenerarPDF {
     
     Especialista especialista;
-    ArrayList<Especialista> especialistas;
+    ArrayList<Especialista> especialistasPrediagnosticos;
+    ArrayList<Especialista> especialistasTratamiento;
     DAO.Paciente paciente;
     JTextArea prediagnostico[];
     JTextArea tratamiento[];
 
-    public GenerarPDF(Especialista especialista,  ArrayList<Especialista> especialistas, DAO.Paciente paciente,JTextArea prediagnostico[], JTextArea tratamiento[]) {
+    public GenerarPDF(Especialista especialista, ArrayList<Especialista> especialistasPrediagnosticos, ArrayList<Especialista> especialistasTratamiento, DAO.Paciente paciente,JTextArea prediagnostico[], JTextArea tratamiento[]) {
         this.especialista = especialista;
-        this.especialistas = especialistas;
+        this.especialistasPrediagnosticos = especialistasPrediagnosticos;
+        this.especialistasTratamiento = especialistasTratamiento;
         this.paciente = paciente;
         this.prediagnostico = prediagnostico;
         this.tratamiento = tratamiento;
     }
-    
-    /*public static void main(String[] args) 
-    {
-       try {
-           writePDF();
-       } catch (IOException ex) {
-           Logger.getLogger(GererarPDF.class.getName()).log(Level.SEVERE, null, ex);
-       }
-    }*/
     
     public void writePDF() throws FileNotFoundException, IOException {
  
@@ -180,7 +173,7 @@ public class GenerarPDF {
             for(int i=0; i<TamanoPre; i++){
                 if(i!= 0)
                     document.add(orangelines);
-                paragraphEspecialistas.add("Atendido por: " + this.especialistas.get(i).getNombre() + " " + this.especialistas.get(i).getApellidoPaterno() + " " + this.especialistas.get(i).getApellidoMaterno() + "\n");
+                paragraphEspecialistas.add("Atendido por: " + this.especialistasPrediagnosticos.get(i).getNombre() + " " + this.especialistasPrediagnosticos.get(i).getApellidoPaterno() + " " + this.especialistasPrediagnosticos.get(i).getApellidoMaterno() + "\n");
                 document.add(paragraphEspecialistas);
                 paragraphEspecialistas = null;
                 paragraphEspecialistas = new Paragraph();
@@ -236,7 +229,7 @@ public class GenerarPDF {
             for(int i=0; i<TamanoTra; i++){
                 if(i!= 0)
                     document.add(orangelines);
-                paragraphEspecialistasT.add("Atendido por: " + this.especialistas.get(i).getNombre() + " " + this.especialistas.get(i).getApellidoPaterno() + " " + this.especialistas.get(i).getApellidoMaterno() + "\n");
+                paragraphEspecialistasT.add("Atendido por: " + this.especialistasTratamiento.get(i).getNombre() + " " + this.especialistasTratamiento.get(i).getApellidoPaterno() + " " + this.especialistasTratamiento.get(i).getApellidoMaterno() + "\n");
                 document.add(paragraphEspecialistasT);
                 paragraphEspecialistasT = null;
                 paragraphEspecialistasT = new Paragraph();
@@ -248,11 +241,7 @@ public class GenerarPDF {
                 paragraphDatosT = new Paragraph();
                 paragraphDatosT.setFont(fontDatos);                
             }
-            
-           
-            
-            document.close();
- 
+            document.close(); 
         } catch (DocumentException e) {
             e.printStackTrace();
         }
