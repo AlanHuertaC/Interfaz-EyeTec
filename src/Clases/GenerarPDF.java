@@ -109,13 +109,13 @@ public class GenerarPDF {
             document.add(paragraphLorem);
             document.add(p3);*/
             /*Doctor*/
-            Font fontDoctor = new Font();            
+            /*Font fontDoctor = new Font();            
             fontDoctor.setStyle(Font.ITALIC);
             fontDoctor.setSize(12);
             Paragraph paragraphDoctor = new Paragraph();
             paragraphDoctor.setFont(fontDoctor);
             paragraphDoctor.add("Dr. " + especialista.getNombre() + " " + especialista.getApellidoPaterno() + " " + especialista.getApellidoMaterno() + "\n\n");
-            document.add(paragraphDoctor);
+            document.add(paragraphDoctor);*/
             
             /*Texto Paciente*/
             Font fontTituloPaciente = new Font();            

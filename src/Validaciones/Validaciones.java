@@ -30,7 +30,7 @@ public class Validaciones {
             campo.setBorder(redline);
         }
         else if(!campo.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+")){
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo " + nombreCampo);
+            JOptionPane.showMessageDialog(null,"Debe ingresar sólo letras en el campo " + nombreCampo);
             campo.setText("");            
         }else{
             campo.setBorder(new JTextField().getBorder()); 
@@ -42,7 +42,7 @@ public class Validaciones {
             campo.setBorder(redline);
         }
         else if(!campo.getText().matches("[0-9]+")){
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo números en el campo " + nombreCampo);
+            JOptionPane.showMessageDialog(null,"Debe ingresar sólo números en el campo " + nombreCampo);
             campo.setText("");            
         }else{
             campo.setBorder(new JTextField().getBorder()); 
@@ -67,7 +67,7 @@ public class Validaciones {
         }
         else
         if(!campo.getText().matches("[A-Za-z0-9À-ÿ\u00f1\u00d1 ]+")){
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo números o letras en el campo " + nombreCampo);
+            JOptionPane.showMessageDialog(null,"Debe ingresar sólo números o letras en el campo " + nombreCampo);
             campo.setText("");            
         }else{
             campo.setBorder(new JTextField().getBorder());
@@ -80,7 +80,7 @@ public class Validaciones {
         }
         else
         if (!campo.getText().matches("^[a-zA-Z0-9À-ÿ\u00f1\u00d1]+$")){   
-            JOptionPane.showMessageDialog(null,"Debe ingresar letras y numeros sin caracteres especiales o espacios");
+            JOptionPane.showMessageDialog(null,"Debe ingresar letras y números sin caracteres especiales o espacios");
             campo.setText("");
         }else{
             campo.setBorder(new JTextField().getBorder());
