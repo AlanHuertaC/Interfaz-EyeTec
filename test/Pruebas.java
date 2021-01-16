@@ -1,7 +1,13 @@
 
 import Clases.Conexion;
 import Clases.RunApps;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /*
@@ -66,16 +72,43 @@ public class Pruebas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*RunApps runapps = new RunApps();
-        runapps.OpenCatVenge();*/
-        /*Conexion con = new Conexion();
-        con.getConexion();*/
         try {
-	String cmd = "C:\\android-sdk\\platform-tools\\adb shell am start -a android.intent.action.MAIN -n com.EyeTec.Catvenge/com.unity3d.player.UnityPlayerActivity -c android,intent.category.LAUNCHER -c com.google.intent.category.CARDBOARD -c com.google.intent.category.DAYDREAM"; //Comando 
-	Runtime.getRuntime().exec(cmd); 
-        } catch (IOException ioe) {
-                System.out.println (ioe);
+            /*RunApps runapps = new RunApps();
+            runapps.OpenCatVenge();*/
+            /*Conexion con = new Conexion();
+            con.getConexion();*/
+            /*try {
+            String cmd = "C:\\android-sdk\\platform-tools\\adb shell am start -a android.intent.action.MAIN -n com.EyeTec.Catvenge/com.unity3d.player.UnityPlayerActivity -c android,intent.category.LAUNCHER -c com.google.intent.category.CARDBOARD -c com.google.intent.category.DAYDREAM"; //Comando
+            Runtime.getRuntime().exec(cmd);
+            } catch (IOException ioe) {
+            System.out.println (ioe);
+            }*/
+            
+            /*JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = chooser.showOpenDialog(null);
+            // int returnValue = jfc.showSaveDialog(null);
+            
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            System.out.println("You chose to open this directory: " +
+            chooser.getSelectedFile().getAbsolutePath());
+            }*/
+            
+            FileDialog dialogoArchivo;
+            Frame f  =new Frame();
+            dialogoArchivo = new FileDialog(f,"Lista de Archivos desde Frame", FileDialog.SAVE);
+            dialogoArchivo.show();
+            
+            System.err.println("El directorio es: " + dialogoArchivo.getDirectory() + dialogoArchivo.getFile());
+             
+        
+        /*Abrir explorador de archivos Windows*/  
+        /*Process p = new ProcessBuilder("explorer.exe", "/select,C:\\directory\\selectedFile").start();*/
+        } catch (Exception ex) {
+            Logger.getLogger(Pruebas.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

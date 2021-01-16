@@ -39,6 +39,11 @@ public class BuscarPaciente extends javax.swing.JFrame {
         initComponents();
         setTitle("Buscar paciente");
         setResizable(false);  
+        
+        btnSeleccionar.setEnabled(false);
+        btnModificar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+        
         con = cone.getConexion(); //trae la conexion
         this.especialista = especialista;
         textNombre.setText(this.especialista.getNombre() + " " + especialista.getApellidoPaterno() + " " + especialista.getApellidoMaterno());
@@ -550,10 +555,16 @@ public class BuscarPaciente extends javax.swing.JFrame {
 
     private void textSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSearchKeyTyped
         filtrarPaciente();
+        btnSeleccionar.setEnabled(false);
+        btnModificar.setEnabled(false);
+        btnEliminar.setEnabled(false);
     }//GEN-LAST:event_textSearchKeyTyped
 
     private void tablaPacientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPacientesMouseClicked
         seleccionarPacienteTabla();
+        btnSeleccionar.setEnabled(true);
+        btnModificar.setEnabled(true);
+        btnEliminar.setEnabled(true);
     }//GEN-LAST:event_tablaPacientesMouseClicked
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed

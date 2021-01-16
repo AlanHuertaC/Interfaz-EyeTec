@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import com.itextpdf.text.pdf.PdfPTable;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.net.URL;
 import javax.swing.JTextArea;
 /**
  *
@@ -51,17 +54,23 @@ public class GenerarPDF {
     }
     
     public void writePDF() throws FileNotFoundException, IOException {
- 
+        
+        FileDialog dialogoArchivo;
+        Frame f  =new Frame();
+        dialogoArchivo = new FileDialog(f,"Guardar reporte", FileDialog.SAVE);
+        dialogoArchivo.show();
+        
         Document document = new Document();
  
         try {
-            String path = new File(".").getCanonicalPath();
-            String FILE_NAME = path + "/reporte.pdf";
+            /*String path = new File(".").getCanonicalPath();
+            String FILE_NAME = path + "/reporte.pdf";*/
+            String FILE_NAME = dialogoArchivo.getDirectory() + System.getProperty("file.separator") + dialogoArchivo.getFile() + ".pdf";
         	
             PdfWriter.getInstance(document, new FileOutputStream(new File(FILE_NAME))); 
             document.open();
             
-            Image foto = Image.getInstance(System.getProperty("user.dir") + "/logo.jpg");
+            Image foto = Image.getInstance(getClass().getResource("/Images/logo.jpg"));            
             foto.scaleToFit(200, 200);
             foto.setAlignment(Chunk.ALIGN_MIDDLE);
             document.add(foto);
@@ -159,7 +168,7 @@ public class GenerarPDF {
             int TamanoPre = this.prediagnostico.length - 1;
             
             /*Lineas naranjas*/
-            Image orangelines = Image.getInstance(System.getProperty("user.dir") + "/Orange-lines.png");
+            Image orangelines = Image.getInstance(getClass().getResource("/Images/Orange-lines.png"));
             orangelines.scaleToFit(300, 40);
             orangelines.setAlignment(Chunk.ALIGN_MIDDLE);
             
@@ -187,7 +196,7 @@ public class GenerarPDF {
             }
            
             /*Separador azul*/
-            Image bluelines = Image.getInstance(System.getProperty("user.dir") + "/Blue-lines.png");
+            Image bluelines = Image.getInstance(getClass().getResource("/Images/Blue-lines.png"));
             bluelines.scaleToFit(500, 40);
             bluelines.setAlignment(Chunk.ALIGN_MIDDLE);
             document.add(bluelines);
@@ -228,7 +237,7 @@ public class GenerarPDF {
             
             for(int i=0; i<TamanoTra; i++){
                 if(i!= 0)
-                    document.add(orangelines);
+                   document.add(orangelines);
                 paragraphEspecialistasT.add("Atendido por: " + this.especialistasTratamiento.get(i).getNombre() + " " + this.especialistasTratamiento.get(i).getApellidoPaterno() + " " + this.especialistasTratamiento.get(i).getApellidoMaterno() + "\n");
                 document.add(paragraphEspecialistasT);
                 paragraphEspecialistasT = null;
