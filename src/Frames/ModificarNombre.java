@@ -10,6 +10,7 @@ import Validaciones.Validaciones;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +31,7 @@ public class ModificarNombre extends javax.swing.JFrame {
     public ModificarNombre(DAO.Paciente paciente) {
         this.paciente = paciente;
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         validaciones = new Validaciones();
         setTitle("Modificar nombre del paciente");
     }

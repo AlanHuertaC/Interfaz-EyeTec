@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -29,6 +30,7 @@ public class RegistroEspecialista extends javax.swing.JFrame {
 
     public RegistroEspecialista() {
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         setTitle("Registro especialista");
         setResizable(false);     
         validaciones = new Validaciones();

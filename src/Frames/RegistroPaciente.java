@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -38,6 +39,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
 
     public RegistroPaciente(){
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         setTitle("Registro pacientes");
         setResizable(false);
     }
@@ -48,6 +50,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
         this.paciente = paciente;
         this.tipoConsulta = tipoConsulta;
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         setTitle("Registro pacientes");
         setResizable(false);
         validaciones = new Validaciones();      
@@ -61,6 +64,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
         this.tipoConsulta = tipoConsulta;
         
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         setTitle("Registro pacientes");
         setResizable(false);   
         validaciones = new Validaciones();      

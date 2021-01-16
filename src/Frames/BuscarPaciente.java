@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -39,7 +40,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
         initComponents();
         setTitle("Buscar paciente");
         setResizable(false);  
-        
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         btnSeleccionar.setEnabled(false);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);

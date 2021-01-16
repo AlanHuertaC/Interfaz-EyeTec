@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,7 +44,8 @@ public class Detalles extends javax.swing.JFrame {
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
         this.prediagnostico = prediagnostico;
-        initComponents();        
+        initComponents();  
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         /*Detalles prediagnostico*/
         detallesPrediagnostico();
         /*Tratamiento*/

@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
@@ -42,6 +43,7 @@ public class Paciente extends javax.swing.JFrame {
     
     public Paciente(Especialista especialista, DAO.Paciente paciente) {
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         this.especialista = especialista;
         this.paciente = paciente;
         //textNombre.setText(this.paciente.getNombre() + " " + this.paciente.getApellidoPaterno() + " " + this.paciente.getApellidoMaterno());
