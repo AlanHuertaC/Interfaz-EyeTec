@@ -17,6 +17,7 @@ public class RunApps {
         Runtime runTime = Runtime.getRuntime();
         String executablePath = "C:\\Users\\Alan Huerta Cortés\\OneDrive\\Escritorio\\TTAlan\\TT2\\EjecutaCatvenge.bat";
         //String executablePath = System.getProperty("user.dir") + "/EjecutaCatvenge.bat";
+        //String executablePath = getClass().getResource("/Scripts/EjecutaCatvenge.bat").getPath();
         try {
             Process process = runTime.exec(executablePath);
         } catch (IOException ex) { }
@@ -25,6 +26,7 @@ public class RunApps {
         Runtime runTime = Runtime.getRuntime();
         String executablePath = "C:\\Users\\Alan Huerta Cortés\\OneDrive\\Escritorio\\TTAlan\\TT2\\EjecutaSpaceHero.bat";
         //String executablePath = System.getProperty("user.dir") + "/EjecutaSpaceHero.bat";
+        //String executablePath = getClass().getResource("/Scripts/EjecutaSpaceHero.bat").getPath();
         try {
             Process process = runTime.exec(executablePath);
         } catch (IOException ex) { }
@@ -33,6 +35,7 @@ public class RunApps {
         Runtime runTime = Runtime.getRuntime();
         String executablePath = "C:\\Users\\Alan Huerta Cortés\\OneDrive\\Escritorio\\TTAlan\\TT2\\EjecutaCalentamiento.bat";
         //String executablePath = System.getProperty("user.dir") + "/EjecutaCalentamiento.bat";
+        //String executablePath = getClass().getResource("/Scripts/EjecutaCalentamiento.bat").getPath();
         try {
             Process process = runTime.exec(executablePath);
         } catch (IOException ex) { }
@@ -42,6 +45,8 @@ public class RunApps {
         Runtime runTime = Runtime.getRuntime();
         String executablePath = "C:\\Users\\Alan Huerta Cortés\\OneDrive\\Escritorio\\TTAlan\\TT2\\EjecutaRelajacion.bat";
         //String executablePath = System.getProperty("user.dir") + "/EjecutaRelajacion.bat";
+        //String executablePath = getClass().getResource("/Scripts/EjecutaRelajacion.bat").getPath();
+        System.err.println(executablePath);
         try {
             Process process = runTime.exec(executablePath);
         } catch (IOException ex) { }

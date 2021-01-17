@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import com.itextpdf.text.pdf.PdfPTable;
+import java.awt.Desktop;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.net.URL;
@@ -61,12 +62,12 @@ public class GenerarPDF {
         dialogoArchivo.show();
         
         Document document = new Document();
- 
+        String FILE_NAME = dialogoArchivo.getDirectory() + System.getProperty("file.separator") + dialogoArchivo.getFile() + ".pdf";
+        	
         try {
             /*String path = new File(".").getCanonicalPath();
             String FILE_NAME = path + "/reporte.pdf";*/
-            String FILE_NAME = dialogoArchivo.getDirectory() + System.getProperty("file.separator") + dialogoArchivo.getFile() + ".pdf";
-        	
+           
             PdfWriter.getInstance(document, new FileOutputStream(new File(FILE_NAME))); 
             document.open();
             
@@ -253,6 +254,13 @@ public class GenerarPDF {
             document.close(); 
         } catch (DocumentException e) {
             e.printStackTrace();
+        }
+        
+        try {
+            File path = new File (FILE_NAME);
+            Desktop.getDesktop().open(path);
+        }catch (IOException ex) {
+            ex.printStackTrace();
         }
  
     }

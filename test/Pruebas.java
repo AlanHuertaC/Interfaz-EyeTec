@@ -1,8 +1,10 @@
 
 import Clases.Conexion;
 import Clases.RunApps;
+import java.awt.Desktop;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -41,6 +43,7 @@ public class Pruebas extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,13 +54,22 @@ public class Pruebas extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(157, 157, 157)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
                 .addContainerGap(170, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -65,7 +77,9 @@ public class Pruebas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(109, 109, 109)
                 .addComponent(jButton1)
-                .addContainerGap(168, Short.MAX_VALUE))
+                .addGap(53, 53, 53)
+                .addComponent(jButton2)
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
@@ -112,6 +126,22 @@ public class Pruebas extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        /*Runtime runTime = Runtime.getRuntime();
+        String executablePath = "C:\\Users\\Alan Huerta Cortés\\OneDrive\\Escritorio\\Paciente.pdf";
+        
+        try {
+            Process process = runTime.exec(executablePath);
+        } catch (IOException ex) { }*/
+        
+        try {
+            File path = new File ("C:\\Users\\Alan Huerta Cortés\\OneDrive\\Escritorio\\ReportesEyeTec\\Paciente.pdf");
+            Desktop.getDesktop().open(path);
+        }catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -149,5 +179,6 @@ public class Pruebas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     // End of variables declaration//GEN-END:variables
 }
