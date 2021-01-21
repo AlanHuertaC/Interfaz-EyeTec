@@ -30,7 +30,8 @@ public class Login extends javax.swing.JFrame {
     Especialista especialista;
     public Login() {
         this.setContentPane(fondo);
-        initComponents();        
+        initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());        
     }
     
     private void login(){

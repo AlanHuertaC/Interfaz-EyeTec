@@ -195,6 +195,8 @@ public class ModificarNombre extends javax.swing.JFrame {
         if(!registroPaciente.existePaciente(textNombre.getText(), textApPaterno.getText(), textApMaterno.getText())){
             modificarPaciente();
             dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Este usuario ya existe");
         }    
     }//GEN-LAST:event_btnModificarActionPerformed
 

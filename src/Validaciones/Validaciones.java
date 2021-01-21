@@ -26,65 +26,86 @@ public class Validaciones {
     
     public void validarCampoSoloLetras(JTextField campo, String nombreCampo){
         
-        if(campo.getText().isEmpty()){
-            campo.setBorder(redline);
-        }
-        else if(!campo.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+")){
-            JOptionPane.showMessageDialog(null,"Debe ingresar sólo letras en el campo " + nombreCampo);
-            campo.setText("");            
+        if(campo.getText().length()<=20){
+            
+            if(campo.getText().isEmpty()){
+                campo.setBorder(redline);
+            }
+            else if(!campo.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+")){
+                JOptionPane.showMessageDialog(null,"Debe ingresar sólo letras en el campo " + nombreCampo);
+                campo.setText("");            
+            }else{
+                campo.setBorder(new JTextField().getBorder()); 
+            } 
         }else{
-            campo.setBorder(new JTextField().getBorder()); 
-        } 
+            JOptionPane.showMessageDialog(null,"Debe ingresar como máximo 20 carácteres en el campo " + nombreCampo);
+        }
     }
     
     public void validarCampoSoloNumeros(JTextField campo, String nombreCampo){
-        if(campo.getText().isEmpty()){
-            campo.setBorder(redline);
-        }
-        else if(!campo.getText().matches("[0-9]+")){
-            JOptionPane.showMessageDialog(null,"Debe ingresar sólo números en el campo " + nombreCampo);
-            campo.setText("");            
+        if(campo.getText().length()<=20){
+            if(campo.getText().isEmpty()){
+                campo.setBorder(redline);
+            }
+            else if(!campo.getText().matches("[0-9]+")){
+                JOptionPane.showMessageDialog(null,"Debe ingresar sólo números en el campo " + nombreCampo);
+                campo.setText("");            
+            }else{
+                campo.setBorder(new JTextField().getBorder()); 
+            }
         }else{
-            campo.setBorder(new JTextField().getBorder()); 
-        }
+            JOptionPane.showMessageDialog(null,"Debe ingresar como máximo 10 carácteres en el campo " + nombreCampo);
+        }    
     }
     
     public void validarCampoEmail(JTextField campo){
-        if(campo.getText().isEmpty()){
-            campo.setBorder(redline);
-        }else
-        if(!campo.getText().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
-          JOptionPane.showMessageDialog(null,"Debe ingresar el formato correcto en el campo Email");
-          campo.setText("");            
+        if(campo.getText().length()<=45){
+            if(campo.getText().isEmpty()){
+                campo.setBorder(redline);
+            }else
+            if(!campo.getText().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
+              JOptionPane.showMessageDialog(null,"Debe ingresar el formato correcto en el campo Email");
+              campo.setText("");            
+            }else{
+                campo.setBorder(new JTextField().getBorder());
+            }
         }else{
-            campo.setBorder(new JTextField().getBorder());
+            JOptionPane.showMessageDialog(null,"Debe ingresar como máximo 45 carácteres en el campo email");
         }
     }
     
     public void validarCampoAlfanumerico(JTextField campo, String nombreCampo){
-        if(campo.getText().isEmpty()){            
-            campo.setBorder(redline);
-        }
-        else
-        if(!campo.getText().matches("[A-Za-z0-9À-ÿ\u00f1\u00d1 ]+")){
-            JOptionPane.showMessageDialog(null,"Debe ingresar sólo números o letras en el campo " + nombreCampo);
-            campo.setText("");            
+        if(campo.getText().length()<=25){ 
+            if(campo.getText().isEmpty()){            
+                campo.setBorder(redline);
+            }
+            else
+            if(!campo.getText().matches("[A-Za-z0-9À-ÿ\u00f1\u00d1 ]+")){
+                JOptionPane.showMessageDialog(null,"Debe ingresar sólo números o letras en el campo " + nombreCampo);
+                campo.setText("");            
+            }else{
+                campo.setBorder(new JTextField().getBorder());
+            }
         }else{
-            campo.setBorder(new JTextField().getBorder());
-        }
+            JOptionPane.showMessageDialog(null,"Debe ingresar como máximo 25 carácteres en el campo " + nombreCampo);
+        }    
     }
     
     public void validarCampoContrasena(JTextField campo){
-        if(campo.getText().isEmpty()){
-            campo.setBorder(redline);
-        }
-        else
-        if (!campo.getText().matches("^[a-zA-Z0-9À-ÿ\u00f1\u00d1]+$")){   
-            JOptionPane.showMessageDialog(null,"Debe ingresar letras y números sin caracteres especiales o espacios");
-            campo.setText("");
+        if(campo.getText().length()<=25){
+            if(campo.getText().isEmpty()){
+                campo.setBorder(redline);
+            }
+            else
+            if (!campo.getText().matches("^[a-zA-Z0-9À-ÿ\u00f1\u00d1]+$")){   
+                JOptionPane.showMessageDialog(null,"Debe ingresar letras y números sin caracteres especiales o espacios");
+                campo.setText("");
+            }else{
+                campo.setBorder(new JTextField().getBorder());
+            }
         }else{
-            campo.setBorder(new JTextField().getBorder());
-        }
+            JOptionPane.showMessageDialog(null,"Debe ingresar como máximo 25 carácteres en el campo Contraseña");
+        }      
     }
     
     public void validarSimilitudContrasenas(JTextField campo1, JTextField campo2){

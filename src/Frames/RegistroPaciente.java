@@ -80,12 +80,47 @@ public class RegistroPaciente extends javax.swing.JFrame {
         String date = sdf.format(cal.getTime());*/
         try{
             con = cone.getConexion(); 
-            /*Validar si existe un especialista con el mismo nombre*/
+            /*Validar si existe un paciente con el mismo nombre*/
             ps = con.prepareStatement("SELECT * FROM paciente where  nombre = ? AND ap_paterno =? AND ap_materno = ? ");
             //ps.setInt(1, this.paciente.getIdPaciente());
             ps.setString(1, nombre);
             ps.setString(2, Paterno);
             ps.setString(3, Materno);
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+            
+            if(rs.next()){ // para verificar si trae los datos de la consulta
+                existe = true;
+                paciente = new DAO.Paciente(rs.getInt("idPaciente"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("sexo"), rs.getString("fecha_nacimiento"), rs.getString("email"));
+                //JOptionPane.showMessageDialog(null, "Este paciente ya se encuentra registrado"); 
+            }else{
+                existe = false;               
+            }
+            ps.close();               
+            con.close(); // cerrar la conexion
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta" + e.getMessage());
+        }      
+        return existe;
+    }
+    
+    public boolean existePacienteCompleto(String nombre, String Paterno, String Materno, String sexo, String email){
+        Connection con = null;
+        boolean existe = false;
+        Calendar cal = dateChooserNacimiento.getCalendar();
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd"); 
+        String date = sdf.format(cal.getTime());
+        try{
+            con = cone.getConexion(); 
+            /*Validar si existe un paciente con el mismo nombre*/
+            ps = con.prepareStatement("SELECT * FROM paciente where  nombre = ? AND ap_paterno =? AND ap_materno = ? AND fecha_nacimiento = ? AND sexo=? AND email =? ");
+            //ps.setInt(1, this.paciente.getIdPaciente());
+            ps.setString(1, nombre);
+            ps.setString(2, Paterno);
+            ps.setString(3, Materno);
+            ps.setDate(4, Date.valueOf(date));
+            ps.setString(5, sexo);
+            ps.setString(6, email);
+            
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             
             if(rs.next()){ // para verificar si trae los datos de la consulta
@@ -148,7 +183,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
             Logger.getLogger(RegistroPaciente.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        existePaciente(paciente.getNombre(), paciente.getApellidoPaterno(), paciente.getApellidoMaterno());
+        //existePaciente(paciente.getNombre(), paciente.getApellidoPaterno(), paciente.getApellidoMaterno());
         textNombre.setText(paciente.getNombre());
         textApPaterno.setText(paciente.getApellidoPaterno());
         textApMaterno.setText(paciente.getApellidoMaterno());
@@ -395,7 +430,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
             || textEmail.getText().isEmpty() || dateChooserNacimiento.getCalendar() == null){
             JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
         }else{           
-            if(existePaciente(textNombre.getText(), textApPaterno.getText(), textApMaterno.getText())){
+            if(existePacienteCompleto(textNombre.getText(), textApPaterno.getText(), textApMaterno.getText(), comboSexo.getSelectedItem().toString(), textEmail.getText())){
                 JOptionPane.showMessageDialog(null, "Este paciente ya se encuentra registrado");
             }else{    
                 if(tipoConsulta.equalsIgnoreCase("Guardar registro")){

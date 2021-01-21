@@ -74,7 +74,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
             for (int i =1 ; i <= columna; i++) {
                 modelo.addColumn(rsMeta.getColumnLabel(i));
             }
-            modelo.addColumn("Prediagnostico");
+            modelo.addColumn("Prediagnóstico");
             modelo.addColumn("Tratamiento");
             modelo.addColumn("Especialista");
             String filas[] = new String[columna+3];
@@ -191,7 +191,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
                 int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien el insert
                 //System.out.println(res);
                 if(res > 0){
-                    System.out.println("Se agrego correctamente el registro api");
+                    
                     ps = con.prepareStatement("UPDATE api SET idPaciente=?, idEspecialista=? WHERE id=? "); // para insertar valores a mi tabla
                     ps.setInt(1, this.paciente.getIdPaciente());
                     ps.setInt(2, especialista.getIdEspecialista());
@@ -199,7 +199,7 @@ public class BuscarPaciente extends javax.swing.JFrame {
 
                     res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
                     if(res > 0){
-                        System.out.println("Se modifico correctamente los datos de la API");
+             
 
                     }else{
                         JOptionPane.showMessageDialog(null,"No se pudieron modifiar los datos de la API");

@@ -9,6 +9,7 @@ import Clases.Unity;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal( ) {
         initComponents();  
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         setOpacity(0.95f);
     }
 
