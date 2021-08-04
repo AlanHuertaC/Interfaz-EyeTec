@@ -12,7 +12,7 @@ public class Conexion {
     //private final String base = "tienda";
     private final String user = "root";
     private final String password = "root";
-    private final String url = "jdbc:mysql://localhost:3306/eyetec"; // despues de local host puede ir la url si esta en internet
+    private final String url = "jdbc:mysql://localhost:3306/eyetecdb"; // despues de local host puede ir la url si esta en internet
     private Connection con = null;
     
     public Connection getConexion(){

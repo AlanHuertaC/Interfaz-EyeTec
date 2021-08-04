@@ -1,0 +1,1 @@
+C:\android-sdk\platform-tools\adb shell am start -a android.intent.action.MAIN -n com.EyeTec.Relajacion/com.unity3d.player.UnityPlayerActivity -c android,intent.category.LAUNCHER -c com.google.intent.category.CARDBOARD -c com.google.intent.category.DAYDREAM

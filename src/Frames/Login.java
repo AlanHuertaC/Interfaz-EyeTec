@@ -6,6 +6,7 @@
 package Frames;
 
 import Clases.Conexion;
+import DAO.Especialista;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -26,18 +27,14 @@ public class Login extends javax.swing.JFrame {
     PreparedStatement ps;
     ResultSet rs;
     Conexion cone = new Conexion();
-    /*Datos del especialista*/
-    public static String idEspecialista;
-    public static String nombreEspecialista;
-    public static String apellidoPaterno;
-    public static String apellidoMaterno;
+    Especialista especialista;
     public Login() {
         this.setContentPane(fondo);
         initComponents();
-        
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());        
     }
     
-    public void login(){
+    private void login(){
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
         try{
@@ -47,14 +44,10 @@ public class Login extends javax.swing.JFrame {
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             
-            if(rs.next()){ // para verificar si trae los datos de la consulta
-                idEspecialista= rs.getString("idEspecialista");
-                nombreEspecialista = rs.getString("nombre");
-                apellidoPaterno = rs.getString("ap_paterno");
-                apellidoMaterno = rs.getString("ap_materno");
-                //RegistroPaciente registro = new RegistroPaciente(idEspecialista);
-                //registro.setVisible(true);
-                BuscarPaciente buscarP = new BuscarPaciente();
+            if(rs.next()){ 
+                especialista = new Especialista(rs.getInt("idEspecialista"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("cedula"), rs.getString("sexo"), rs.getInt("edad"), rs.getString("usuario"), rs.getString("contraseña"));                
+                
+                BuscarPaciente buscarP = new BuscarPaciente(especialista);
                 buscarP.setVisible(true);
                 dispose();
  
@@ -66,7 +59,20 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
         }
     }
-
+    
+    private void validacionCamposVacios(){
+        if(textUsuario.getText().isEmpty()  || textPassword.getText().isEmpty() ){
+            JOptionPane.showMessageDialog(null, "Debe llenar los campos solicitados");
+        }else
+        login();
+    }
+    
+    private void registroEspecialista(){
+        RegistroEspecialista Respecialista = new RegistroEspecialista();
+        Respecialista.setVisible(true);
+        dispose();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,9 +86,9 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         textUsuario = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        btnLogin = new javax.swing.JButton();
+        labelSalir = new javax.swing.JLabel();
+        labelRegistrarse = new javax.swing.JLabel();
         textPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -100,24 +106,24 @@ public class Login extends javax.swing.JFrame {
 
         jLabel3.setText("Contraseña:");
 
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
-        jLabel4.setText("Salir");
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        labelSalir.setText("Salir");
+        labelSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                labelSalirMouseClicked(evt);
             }
         });
 
-        jLabel5.setText("Registrarse");
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+        labelRegistrarse.setText("Registrarse");
+        labelRegistrarse.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
+                labelRegistrarseMouseClicked(evt);
             }
         });
 
@@ -146,10 +152,10 @@ public class Login extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
                 .addGap(78, 78, 78))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -170,11 +176,11 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(textPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
-                .addComponent(jButton1)
+                .addComponent(btnLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
+                .addComponent(labelRegistrarse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(jLabel4)
+                .addComponent(labelSalir)
                 .addContainerGap())
         );
 
@@ -182,22 +188,17 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void labelSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelSalirMouseClicked
         System.exit(0); 
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_labelSalirMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(textUsuario.getText().isEmpty()  || textPassword.getText().isEmpty() ){
-            JOptionPane.showMessageDialog(null, "Debe llenar los campos solicitados");
-        }else
-        login();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        validacionCamposVacios();
+    }//GEN-LAST:event_btnLoginActionPerformed
 
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        RegistroEspecialista Respecialista = new RegistroEspecialista();
-        Respecialista.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jLabel5MouseClicked
+    private void labelRegistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelRegistrarseMouseClicked
+        registroEspecialista();
+    }//GEN-LAST:event_labelRegistrarseMouseClicked
 
     private void textUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textUsuarioKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
@@ -253,12 +254,12 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel labelRegistrarse;
+    private javax.swing.JLabel labelSalir;
     private javax.swing.JPasswordField textPassword;
     private javax.swing.JTextField textUsuario;
     // End of variables declaration//GEN-END:variables

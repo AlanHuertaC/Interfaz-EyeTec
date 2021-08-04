@@ -6,14 +6,19 @@
 package Frames;
 
 import Clases.Conexion;
-import Clases.Unity;
-import com.toedter.calendar.JDateChooser;
+import DAO.Especialista;
+import Validaciones.Validaciones;
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,17 +32,113 @@ public class RegistroPaciente extends javax.swing.JFrame {
     Conexion cone = new Conexion();
     String idPaciente;
     String idEspecialista;
-    public boolean flag = false;
-    
-    public RegistroPaciente(String idEspecialista) {
-        this.idEspecialista = idEspecialista;
+    Especialista especialista;
+    DAO.Paciente paciente;
+    Validaciones validaciones;
+    String tipoConsulta;
+
+    public RegistroPaciente(){
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
         setTitle("Registro pacientes");
         setResizable(false);
-        System.out.println("El id del especialista ingresado es: " + this.idEspecialista);
+    }
+
+/*Constructor para modificar paciente*/    
+    public RegistroPaciente(Especialista especialista,DAO.Paciente paciente, String tipoConsulta){
+        this.especialista = especialista;
+        this.paciente = paciente;
+        this.tipoConsulta = tipoConsulta;
+        initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
+        setTitle("Registro pacientes");
+        setResizable(false);
+        validaciones = new Validaciones();      
+        btnGuardar.setText(tipoConsulta);     
+        llenarModificacion();
     }
     
-    public void registroPaciente(){
+    public RegistroPaciente(Especialista especialista, String tipoConsulta) {
+        this.especialista = especialista;
+        this.idEspecialista = String.valueOf(especialista.getIdEspecialista());// idEspecialista;
+        this.tipoConsulta = tipoConsulta;
+        
+        initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Images/virtual-reality.png")).getImage());
+        setTitle("Registro pacientes");
+        setResizable(false);   
+        validaciones = new Validaciones();      
+        btnGuardar.setText(tipoConsulta);
+        
+    }
+    
+    public boolean existePaciente(String nombre, String Paterno, String Materno){
+        Connection con = null;
+        boolean existe = false;
+        /*Calendar cal = dateChooserNacimiento.getCalendar();
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd"); 
+        String date = sdf.format(cal.getTime());*/
+        try{
+            con = cone.getConexion(); 
+            /*Validar si existe un paciente con el mismo nombre*/
+            ps = con.prepareStatement("SELECT * FROM paciente where  nombre = ? AND ap_paterno =? AND ap_materno = ? ");
+            //ps.setInt(1, this.paciente.getIdPaciente());
+            ps.setString(1, nombre);
+            ps.setString(2, Paterno);
+            ps.setString(3, Materno);
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+            
+            if(rs.next()){ // para verificar si trae los datos de la consulta
+                existe = true;
+                paciente = new DAO.Paciente(rs.getInt("idPaciente"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("sexo"), rs.getString("fecha_nacimiento"), rs.getString("email"));
+                //JOptionPane.showMessageDialog(null, "Este paciente ya se encuentra registrado"); 
+            }else{
+                existe = false;               
+            }
+            ps.close();               
+            con.close(); // cerrar la conexion
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta" + e.getMessage());
+        }      
+        return existe;
+    }
+    
+    public boolean existePacienteCompleto(String nombre, String Paterno, String Materno, String sexo, String email){
+        Connection con = null;
+        boolean existe = false;
+        Calendar cal = dateChooserNacimiento.getCalendar();
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd"); 
+        String date = sdf.format(cal.getTime());
+        try{
+            con = cone.getConexion(); 
+            /*Validar si existe un paciente con el mismo nombre*/
+            ps = con.prepareStatement("SELECT * FROM paciente where  nombre = ? AND ap_paterno =? AND ap_materno = ? AND fecha_nacimiento = ? AND sexo=? AND email =? ");
+            //ps.setInt(1, this.paciente.getIdPaciente());
+            ps.setString(1, nombre);
+            ps.setString(2, Paterno);
+            ps.setString(3, Materno);
+            ps.setDate(4, Date.valueOf(date));
+            ps.setString(5, sexo);
+            ps.setString(6, email);
+            
+            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
+            
+            if(rs.next()){ // para verificar si trae los datos de la consulta
+                existe = true;
+                paciente = new DAO.Paciente(rs.getInt("idPaciente"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("sexo"), rs.getString("fecha_nacimiento"), rs.getString("email"));
+                //JOptionPane.showMessageDialog(null, "Este paciente ya se encuentra registrado"); 
+            }else{
+                existe = false;               
+            }
+            ps.close();               
+            con.close(); // cerrar la conexion
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta" + e.getMessage());
+        }      
+        return existe;
+    }
+    
+    private void registroPaciente(){
         Connection con = null;
          
         Calendar cal = dateChooserNacimiento.getCalendar();
@@ -47,7 +148,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
         try{
             con = cone.getConexion(); //trae la conexion
             ps = con.prepareStatement("Insert INTO Paciente (nombre,ap_paterno,ap_materno,sexo,fecha_nacimiento,email) VALUES(?,?,?,?,?,?)"); // para insertar valores a mi tabla
-            ps.setString(1,textName.getText()); // (indice desde el cual va empezar osea la clave, guarda el texto que esta en el text Field)
+            ps.setString(1,textNombre.getText()); // (indice desde el cual va empezar osea la clave, guarda el texto que esta en el text Field)
             ps.setString(2,textApPaterno.getText());
             ps.setString(3, textApMaterno.getText());
             ps.setString(4, comboSexo.getSelectedItem().toString());
@@ -66,84 +167,75 @@ public class RegistroPaciente extends javax.swing.JFrame {
             
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"No se pudo conectar" + e.toString());
-        }
-        /**/
-        /*Seleccion del paciente para obtener su id*/
-        try{
-            ps = con.prepareStatement("SELECT * FROM paciente where nombre = ? and ap_paterno = ? and ap_materno = ?");
-            ps.setString(1, textName.getText());
-            ps.setString(2, textApPaterno.getText());
-            ps.setString(3,textApMaterno.getText());
-            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
-            
-            if(rs.next()){ // para verificar si trae los datos de la consulta
-                System.out.println( rs.getString("idPaciente") + " " +rs.getString("nombre"));
-                idPaciente = rs.getString("idPaciente");
-                System.out.println("El id del paciente es: "+ idPaciente);
- 
-            }else{
-                JOptionPane.showMessageDialog(null,"No se encuentran los datos");
-            }
-            ps.close();
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-        }
-        
+        }        
         LimpiarCajas();
-        
-        /*Validar si hay datos en la tabla API*/
-        /*try{
-            ps = con.prepareStatement("SELECT * FROM api where id = ?");
-            ps.setString(1,"1");
-            rs = ps.executeQuery(); // guarda el resutado de la consulta en res
-            
-            if(!rs.next()){ // para verificar si trae los datos de la consulta
-                ps = con.prepareStatement("Insert INTO api (id,idPaciente,idEspecialista) VALUES(?,?,?)"); // para insertar valores a mi tabla
-                ps.setString(1, "1");
-                ps.setString(2,"0");
-                ps.setString(3,"0");
-                
-                int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien el insert
-                //System.out.println(res);
-                if(res > 0){
-                   System.out.println("Se agrego correctamente el registro api");
-                    ps = con.prepareStatement("UPDATE api SET idPaciente=?, idEspecialista=? WHERE id=? "); // para insertar valores a mi tabla
-                    ps.setString(1,idPaciente);
-                    ps.setString(2, idEspecialista);
-                    ps.setString(3,"1");
-
-                    res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
-                    if(res > 0){
-                        System.out.println("Se modifico correctamente los datos de la API");
-
-                    }else{
-                        JOptionPane.showMessageDialog(null,"No se pudieron modifiar los datos de la API");
-                    } 
-                   
-                }else{
-                    JOptionPane.showMessageDialog(null,"No se pudieron agregar los datos api");
-            } 
-            }else{
-                ps = con.prepareStatement("UPDATE api SET idPaciente=?, idEspecialista=? WHERE id=? "); // para insertar valores a mi tabla
-                ps.setString(1,idPaciente);
-                ps.setString(2, idEspecialista);
-                ps.setString(3,"1");
-
-                int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
-                if(res > 0){
-                    System.out.println("Se modifico correctamente los datos de la API");
-
-                }else{
-                    JOptionPane.showMessageDialog(null,"No se pudieron modifiar los datos de la API");
-                } 
-            }
-            ps.close();
-            con.close(); // cerrar la conexion
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al conectar Haciendo la consulta");
-        }*/        
     }
+    
+    private void llenarModificacion(){
+        
+    String fechaNacimiento = paciente.getFechaNacimiento();
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd");
 
+    java.util.Date date = new java.util.Date();
+        try {
+            date = formatter.parse(fechaNacimiento);
+        } catch (ParseException ex) {
+            Logger.getLogger(RegistroPaciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //existePaciente(paciente.getNombre(), paciente.getApellidoPaterno(), paciente.getApellidoMaterno());
+        textNombre.setText(paciente.getNombre());
+        textApPaterno.setText(paciente.getApellidoPaterno());
+        textApMaterno.setText(paciente.getApellidoMaterno());
+        textEmail.setText(paciente.getEmail());
+        dateChooserNacimiento.setDate(date);
+        comboSexo.setSelectedItem(paciente.getSexo());
+        
+    }
+    
+    private void actualizarPaciente(){
+        Connection con = null;
+        con = cone.getConexion(); //trae la conexion
+        Calendar cal = dateChooserNacimiento.getCalendar();
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd"); 
+        String date = sdf.format(cal.getTime());
+        try{
+            ps = con.prepareStatement("UPDATE paciente SET nombre=?, ap_paterno=?, ap_materno=?, sexo=?, fecha_nacimiento=?, email=? WHERE idPaciente=? "); // para insertar valores a mi tabla
+            ps.setString(1, textNombre.getText());
+            ps.setString(2, textApPaterno.getText());
+            ps.setString(3, textApMaterno.getText());
+            ps.setString(4, comboSexo.getSelectedItem().toString());
+            ps.setDate(5,Date.valueOf(date));
+            ps.setString(6,textEmail.getText());
+            
+            ps.setInt(7, paciente.getIdPaciente());
+            System.out.println("el id es: " + paciente.getIdPaciente());
+            int res = ps.executeUpdate(); // nos dara el resultado si se hizo bien 
+            if(res > 0){
+                JOptionPane.showMessageDialog(null,"Se modificó correctamente los datos del paciente");
+
+            }else{
+                JOptionPane.showMessageDialog(null,"No se pudieron modifiar los datos del paciente");
+            } 
+        }catch(Exception e){
+            System.err.println("Error " + e.getMessage() );
+        }
+    }
+    
+    private void volverBusquedaPaciente(){
+        BuscarPaciente buscarPaciente = new BuscarPaciente(especialista);
+        buscarPaciente.setVisible(true);
+        dispose();
+    }
+     
+    private void LimpiarCajas(){
+        textNombre.setText("");
+        textApPaterno.setText("");
+        textApMaterno.setText("");
+        comboSexo.setSelectedIndex(0);
+        textEmail.setText("");
+        dateChooserNacimiento.setCalendar(null);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -161,12 +253,12 @@ public class RegistroPaciente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        textName = new javax.swing.JTextField();
+        textNombre = new javax.swing.JTextField();
         textApPaterno = new javax.swing.JTextField();
         textEmail = new javax.swing.JTextField();
         textApMaterno = new javax.swing.JTextField();
         comboSexo = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         dateChooserNacimiento = new com.toedter.calendar.JDateChooser();
 
@@ -187,9 +279,9 @@ public class RegistroPaciente extends javax.swing.JFrame {
 
         jLabel6.setText("Sexo:");
 
-        textName.addFocusListener(new java.awt.event.FocusAdapter() {
+        textNombre.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                textNameFocusLost(evt);
+                textNombreFocusLost(evt);
             }
         });
 
@@ -213,15 +305,10 @@ public class RegistroPaciente extends javax.swing.JFrame {
 
         comboSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione su sexo", "masculino", "femenino" }));
 
-        jButton2.setText("Regresar");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButton2MouseEntered(evt);
-            }
-        });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.setText("Regresar");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
 
@@ -244,7 +331,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGuardar))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -257,7 +344,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                                 .addGap(41, 41, 41)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textName, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -288,7 +375,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jLabel4)
-                        .addComponent(textName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(textNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(dateChooserNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -304,7 +391,7 @@ public class RegistroPaciente extends javax.swing.JFrame {
                     .addComponent(comboSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnVolver)
                     .addComponent(btnGuardar))
                 .addContainerGap())
         );
@@ -336,94 +423,47 @@ public class RegistroPaciente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-         if(comboSexo.getSelectedIndex() == 0){
+        if(comboSexo.getSelectedIndex() == 0){
             JOptionPane.showMessageDialog(null, "Debe seleccionar su sexo");
         }
-        else if(textName.getText().isEmpty() || textApPaterno.getText().isEmpty() || textApMaterno.getText().isEmpty()
+        else if(textNombre.getText().isEmpty() || textApPaterno.getText().isEmpty() || textApMaterno.getText().isEmpty()
             || textEmail.getText().isEmpty() || dateChooserNacimiento.getCalendar() == null){
             JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
-        }else{
-            JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
-            registroPaciente();
+        }else{           
+            if(existePacienteCompleto(textNombre.getText(), textApPaterno.getText(), textApMaterno.getText(), comboSexo.getSelectedItem().toString(), textEmail.getText())){
+                JOptionPane.showMessageDialog(null, "Este paciente ya se encuentra registrado");
+            }else{    
+                if(tipoConsulta.equalsIgnoreCase("Guardar registro")){
+                    registroPaciente();
+                    JOptionPane.showMessageDialog(null, "Se ha registrado de manera exitosa");
+                }else if(tipoConsulta.equalsIgnoreCase("Modificar registro")){
+                    actualizarPaciente();
+                    //JOptionPane.showMessageDialog(null, "Se actualizó el registro de manera exitosa");
+                }               
+            }                
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        BuscarPaciente buscarPaciente = new BuscarPaciente();
-        buscarPaciente.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+       volverBusquedaPaciente();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void textNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNameFocusLost
-        if(textName.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Nombre");
-            flag = false;
-        }
-        else if(!textName.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Nombre");
-            textName.setText("");            
-            flag = false;
-        }
-    }//GEN-LAST:event_textNameFocusLost
+    private void textNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNombreFocusLost
+       validaciones.validarCampoSoloLetras(textNombre, "Nombre");
+    }//GEN-LAST:event_textNombreFocusLost
 
     private void textApPaternoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textApPaternoFocusLost
-        if(textApPaterno.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido paterno");
-            flag = false;
-        }else
-        if(!textApPaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-          flag = true;
-          JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido paterno");
-          textApPaterno.setText("");            
-          flag = false;
-        }
+        validaciones.validarCampoSoloLetras(textApPaterno, "Apellido paterno");
     }//GEN-LAST:event_textApPaternoFocusLost
 
     private void textApMaternoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textApMaternoFocusLost
-        if(textApMaterno.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Apellido materno");
-            flag = false;
-        }else
-        if(!textApMaterno.getText().matches("[A-Za-zÀ-ÿ\u00f1\u00d1 ]+") && flag == false){
-          flag = true;
-          JOptionPane.showMessageDialog(null,"Debe ingresar solo letras en el campo Apellido materno");
-          textApMaterno.setText("");            
-          flag = false;
-        }
+       validaciones.validarCampoSoloLetras(textApMaterno, "Apellido materno");
     }//GEN-LAST:event_textApMaternoFocusLost
 
     private void textEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textEmailFocusLost
-        if(textEmail.getText().isEmpty() && flag == false){
-            flag = true;
-            JOptionPane.showMessageDialog(null,"Dejó vacio el campo Email");
-            flag = false;
-        }else
-        if(!textEmail.getText().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$") && flag == false){
-          flag = true;
-          JOptionPane.showMessageDialog(null,"Debe ingresar el formato correcto en el campo Email");
-          textEmail.setText("");            
-          flag = false;
-        }
-        
+        validaciones.validarCampoEmail(textEmail);
     }//GEN-LAST:event_textEmailFocusLost
-
-    private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseEntered
-        flag = true;
-    }//GEN-LAST:event_jButton2MouseEntered
-    
-    public void LimpiarCajas(){
-        textName.setText("");
-        textApPaterno.setText("");
-        textApMaterno.setText("");
-        comboSexo.setSelectedIndex(0);
-        textEmail.setText("");
-        dateChooserNacimiento.setCalendar(null);
-    }
-            
+           
     /**
      * @param args the command line arguments
      */
@@ -455,16 +495,17 @@ public class RegistroPaciente extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegistroPaciente("").setVisible(true);
+                Especialista especialista = new Especialista();
+                new RegistroPaciente(especialista,"").setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> comboSexo;
     private com.toedter.calendar.JDateChooser dateChooserNacimiento;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -476,6 +517,6 @@ public class RegistroPaciente extends javax.swing.JFrame {
     private javax.swing.JTextField textApMaterno;
     private javax.swing.JTextField textApPaterno;
     private javax.swing.JTextField textEmail;
-    private javax.swing.JTextField textName;
+    private javax.swing.JTextField textNombre;
     // End of variables declaration//GEN-END:variables
 }
