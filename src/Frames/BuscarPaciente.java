@@ -52,6 +52,10 @@ public class BuscarPaciente extends javax.swing.JFrame {
         seleccionFilas();
         
     }
+    
+    public BuscarPaciente(){
+        
+    }
         
     public void llenarTablaInicio(){
         try{            
@@ -423,6 +427,11 @@ public class BuscarPaciente extends javax.swing.JFrame {
 
         textNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         textNombre.setText("Nombre");
+        textNombre.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textNombreMouseClicked(evt);
+            }
+        });
 
         jLabel3.setText("Búsqueda de pacientes:");
 
@@ -583,6 +592,11 @@ public class BuscarPaciente extends javax.swing.JFrame {
     private void labelSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelSesionMouseClicked
         cerrarSesion();
     }//GEN-LAST:event_labelSesionMouseClicked
+
+    private void textNombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textNombreMouseClicked
+       ModificarEspecialista modificareEspecialista = new ModificarEspecialista(this);
+       modificareEspecialista.setVisible(true);
+    }//GEN-LAST:event_textNombreMouseClicked
 
     /**
      * @param args the command line arguments
