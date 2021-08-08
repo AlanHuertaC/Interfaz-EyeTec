@@ -38,21 +38,21 @@ public class Login extends javax.swing.JFrame {
         Connection con = null;
         con = cone.getConexion(); //trae la conexion
         try{
-            ps = con.prepareStatement("SELECT * FROM especialista where usuario = ? and contraseña = ?");
+            ps = con.prepareStatement("SELECT * FROM especialista where usuario = ? and contrasena = ?");
             ps.setString(1, textUsuario.getText());
             ps.setString(2, textPassword.getText());
   
             rs = ps.executeQuery(); // guarda el resutado de la consulta en res
             
             if(rs.next()){ 
-                especialista = new Especialista(rs.getInt("idEspecialista"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("cedula"), rs.getString("sexo"), rs.getInt("edad"), rs.getString("usuario"), rs.getString("contraseña"));                
+                especialista = new Especialista(rs.getInt("idEspecialista"), rs.getString("nombre"), rs.getString("ap_paterno"), rs.getString("ap_materno"), rs.getString("cedula"), rs.getString("sexo"), rs.getInt("edad"), rs.getString("usuario"), rs.getString("contrasena"));                
                 
                 BuscarPaciente buscarP = new BuscarPaciente(especialista);
                 buscarP.setVisible(true);
                 dispose();
  
             }else{
-                JOptionPane.showMessageDialog(null,"Usuario o contraseña incorrecta, verifique sus datos");
+                JOptionPane.showMessageDialog(null,"Usuario o contrasena incorrecta, verifique sus datos");
             }
             ps.close();
         }catch(Exception e){

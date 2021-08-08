@@ -105,7 +105,7 @@ public class ModificarEspecialista extends javax.swing.JFrame {
         Connection con = null;
         try{
             con = cone.getConexion(); //trae la conexion
-            ps = con.prepareStatement("UPDATE Especialista SET nombre=?, ap_paterno=? ,ap_materno =? ,cedula =? ,sexo =? ,edad =? ,usuario =? ,contraseña=? "); // para insertar valores a mi tabla
+            ps = con.prepareStatement("UPDATE Especialista SET nombre=?, ap_paterno=? ,ap_materno =? ,cedula =? ,sexo =? ,edad =? ,usuario =? ,contrasena=? "); // para insertar valores a mi tabla
             ps.setString(1,textNombre.getText()); // (indice desde el cual va empezar osea la clave, guarda el texto que esta en el text Field)
             ps.setString(2,textApPaterno.getText());
             ps.setString(3, textApMaterno.getText());
