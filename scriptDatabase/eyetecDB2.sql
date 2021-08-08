@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `eyetecdb`.`Especialista` (
   `sexo` VARCHAR(10) NOT NULL,
   `edad` INT NOT NULL,
   `usuario` VARCHAR(25) NOT NULL,
-  `contraseña` VARCHAR(25) NOT NULL,
+  `contrasena` VARCHAR(25) NOT NULL,
   PRIMARY KEY (`idEspecialista`))
 ENGINE = InnoDB;
 
